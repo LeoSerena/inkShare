@@ -1,0 +1,47 @@
+## TABLES
+
+CREATE TABLE Users(
+    userId                 INTEGER,
+    userName               CHAR(255),
+    PWD                    CHAR(64),
+    PRIMARY KEY(userId)
+);
+
+CREATE TABLE UsersStats(
+    userId                 INTEGER NOT NULL,
+    dateAccountCreation    DATE,
+    lastConnection         DATE,
+    FOREIGN KEY(user_id)   REFERENCES Users(user_id)
+);
+
+CREATE TABLE Studies(
+    studyId                INTEGER,
+    ownerId                INTEGER NOT NULL,
+    isPublic               BOOLEAN,
+    title		   CHAR(255)
+    description		   CHAR(1024),
+    dataType1		   INTEGER NOT NULL,
+    dataType2		   INTEGER NOT NULL,
+    dataType3	 	   INTEGER,
+    PRIMARY KEY(studyId),
+    FOREIGN KEY(ownerId)   REFERENCES Users(userId)
+);
+
+CREATE TABLE DataTypes(
+    dataType  		   CHAR(32),
+    dataTypeId		   INTEGER NOT NULL,
+    PRIMARY KEY(dataTypeId)
+);
+
+CREATE TABLE Favorites(
+    userId                 INTEGER,
+    studyId                INTEGER,
+    FOREIGN KEY(userId)    REFERENCES Users(userId),
+    FOREIGN KEY(studyId)   REFERENCES Studies(studyId)
+);
+
+CREATE TABLE Data__(
+    studyId		   INTEGER,
+    index		   INTEGER,
+    data		   depends
+)
