@@ -44,4 +44,4 @@ CREATE TABLE Data__(
     studyId		   INTEGER,
     index		   INTEGER,
     data		   depends
-)
+);
