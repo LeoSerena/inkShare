@@ -1,0 +1,22 @@
+{
+  "name": "inkshare",
+  "version": "1.0.0",
+  "description": "inkshare project",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeoSerena/inkShare.git"
+  },
+  "author": "Leo Marco Serena",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LeoSerena/inkShare/issues"
+  },
+  "homepage": "https://github.com/LeoSerena/inkShare#readme"
+}

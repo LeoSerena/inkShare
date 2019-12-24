@@ -1,7 +1,8 @@
 var mysql = require('mysql');
 
-var con = mysql.createConnection({
+var connection = mysql.createConnection({
     host : "localhost",
+    port : '3306',
     user : "root",
     password : "password",
     database : "inkShareDB"
@@ -10,10 +11,10 @@ var con = mysql.createConnection({
 var sql = "SELECT * FROM users"
 
 
-con.connect(function(err){
+connection.connect(function(err){
     if(err) throw err;
     console.log("established conenction");
-    con.query(
+    connection.query(
         sql,
         function(err, result){
             if(err) throw err;

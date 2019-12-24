@@ -4,10 +4,9 @@ $(document).ready(function(){
         function(e){
             e.preventDefault();
             var search = $('#test').val();
-            console.log(search);
             if(search == 'bigg yoshi'){
                 console.log('bigg yoshi mode activated')
-                $('body').css({'background-image': 'url("bigg_yoshi.jpg")'});
+                $('body').css({'background-image': 'url("images/bigg_yoshi.jpg")'});
             }else{
                 var data = {}
                 data.search = search;
