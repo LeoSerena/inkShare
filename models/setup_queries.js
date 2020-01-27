@@ -1,12 +1,12 @@
 // db creation
-var DBCreate = "CREATE DATABASE inkShareDB"
+const DBCreate = "CREATE DATABASE inkShareDB"
 
 // tables creation
-var table_create = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, user_name VARCHAR(255))";
+const table_create = "CREATE TABLE users (id INT AUTO_INCREMENT PRIMARY KEY, user_name VARCHAR(255))";
 
 //
-var user_inserts = "INSERT INTO users (user_name) VALUES ?";
-var values = [
+const user_inserts = "INSERT INTO users (user_name) VALUES ?";
+const values = [
     ['Bab'],
     ['Ross'],
     ['Donovan'],
