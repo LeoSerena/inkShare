@@ -8,19 +8,9 @@ router.get('/index', function(req, res){
     myPlaceHolder : 'search...'
   })
 })
-//login page
-router.get('/login', function(req, res){
-  res.sendFile(path.join(__dirname,'..', 'html', 'index.html'))
-})
-//sign up page
-router.get('/signUp', function(req, res){
-  res.sendFile(path.join(__dirname,'..', 'user', 'signup'))
-})
-
 //get the error page by default if none is found
 router.get('/*', function(req, res){
   res.render('404')
 })
-
 
 module.exports = router;
