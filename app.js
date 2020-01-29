@@ -10,7 +10,6 @@ var routes = require('./routes/routes.js')
 var test_route = require('./routes/test_routes.js')
 
 var middleware = require('./middlewares/middleware.js')
-//var testConnection = require('./DB/connection.js')
 
 app.use('/util', express.static('util'))
 app.use('/navigation', express.static('navigation'))
@@ -39,7 +38,6 @@ app.use('/', routes);
 
 //main app
 var server = app.listen(8081, function(){
-  //testConnection //test the connection to DB
   var port = server.address().port;
   console.log('app listening at port ' + port)
 })
