@@ -1,5 +1,6 @@
 $(document).ready(function(){
-    $('.home_button').click(function(){
+    $('#home_button').click(function(){
+        console.log('efef')
         $.ajax({
             type : 'GET',
             success : function(data){

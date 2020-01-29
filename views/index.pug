@@ -1,0 +1,19 @@
+head
+    script(src = 'util/jquery.js')
+    script(src = 'util/search.js')
+    script(src = 'navigation/navigation.js')
+
+body
+    title InkShare
+    h1(align = "center") Welcome to InkStudies
+    button(class = 'home_button') HOME
+    div(align = 'right')
+        button(class = 'signin_button') SIGN IN
+        button(class = 'login_button') LOGIN
+    </div>
+
+    hr
+    div
+        input(type = 'text' size = 30 placeholder = myPlaceHolder id = 'test')
+        button(id = 'submit') submit
+    div(id = 'query_result')

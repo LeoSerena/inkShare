@@ -6,7 +6,7 @@ $(document).ready(function(){
             var search = $('#test').val();
             if(search == 'bigg yoshi'){
                 console.log('bigg yoshi mode activated')
-                $('body').css({'background-image': 'url("images/bigg_yoshi.jpg")'});
+                $('body').css({'background-image': 'url("public/images/bigg_yoshi.jpg")'});
             }else{
                 var data = {}
                 data.search = search;
