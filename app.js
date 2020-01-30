@@ -5,6 +5,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var multer = require('multer');
 var upload = multer();
+var cookieParser = require('cookie-parser')
 
 var routes = require('./routes/routes.js')
 var test_route = require('./routes/test_routes.js')
@@ -31,6 +32,9 @@ app.set('views','./views');
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(upload.array());
+
+//cookies
+app.use(cookieParser());
 
 //routes
 app.use('/test', test_route);
