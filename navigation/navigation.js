@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    console.log('ef')
     $('#home_button').click(function(){
         $.ajax({
             type : 'GET',
@@ -11,4 +10,30 @@ $(document).ready(function(){
             }
         })
     });
+
+    $('#login_button').click(function(){
+        $.ajax({
+            type : 'GET',
+            success : function(data){
+                window.location.href = '/test/form/login';
+            },
+            error(data){
+                console.log('problem loading the page');
+            }
+        })
+    });
+
+    $('#register_button').click(function(){
+        $.ajax({
+            type : 'GET',
+            success : function(data){
+                window.location.href = '/test/form/register';
+            },
+            error(data){
+                console.log('problem loading the page');
+            }
+        })
+    });
+
+
 })

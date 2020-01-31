@@ -1,0 +1,28 @@
+html
+html
+   head
+      title Form Tester
+      script(src = '/util/jquery.js')
+      script(src = '/navigation/navigation.js')
+
+   body
+      h1(align = "center") Welcome to InkStudies
+      button(id = 'home_button') HOME
+      form(action = "/test/submit/register", method = "POST")
+         div
+            label username:
+            input(name = "username" value = "username")
+         br
+         div
+            label email:
+            input(name = "email" value = "email")
+         br
+         div
+            label password:
+            input(name = "password" type = "password")
+         br
+         div
+            label password:
+            input(name = "passwordConfirm" type = "password" )
+         br
+         button(type = "submit") register

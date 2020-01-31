@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var multer = require('multer');
 var upload = multer();
 var cookieParser = require('cookie-parser')
+var connect = require('./DB/mongoDB')
 
 var routes = require('./routes/routes.js')
 var test_route = require('./routes/test_routes.js')
@@ -26,8 +27,6 @@ app.set('views','./views');
 //middlewares
 //app.use('/', middleware)
 
-
-
 //form & body parser
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
@@ -43,5 +42,6 @@ app.use('/', routes);
 //main app
 var server = app.listen(8081, function(){
   var port = server.address().port;
+  connect()
   console.log('app listening at port ' + port)
 })
