@@ -35,5 +35,17 @@ $(document).ready(function(){
         })
     });
 
+    $('#private_button').click(function(){
+        $.ajax({
+            type : 'GET',
+            success : function(data){
+                window.location.href = '/private/myPage';
+            },
+            error(data){
+                console.log('problem loading the page');
+            }
+        })
+    });
+
 
 })

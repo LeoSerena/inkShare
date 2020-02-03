@@ -4,6 +4,7 @@ var User = require('../models/User')
 var userRegisterationSchema = require('../middlewares/validations').userRegisterationValidation
 var userLoginSchema = require('../middlewares/validations').userLoginValidation
 var bcrypt = require('bcryptjs')
+var jwt = require('jsonwebtoken');
 
 //forms
 test_routes.get('/form/register', function(req, res){
@@ -34,7 +35,8 @@ test_routes.post('/submit/login', async function(req, res){
         if(!isValid){
             return res.status(400).send('username or password incorrect')
         }else{
-            res.render('loginSuccessful')
+            const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET)
+            res.cookie('auth-token', token, {maxAge : 1000000}).render('loginSuccessful')
         }
     }
 
