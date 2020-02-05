@@ -13,7 +13,7 @@ private_route.get('/myPage', authenticate, async function(req, res){
             email : user.email
         })
     }catch(err){
-        res.send('a problem occured')
+        res.status(400).send('a problem occured')
     }
 
 })

@@ -1,0 +1,11 @@
+doctype html
+html
+    include includes/header.pug
+
+    body
+        div(align = 'right')
+            unless(id)
+                button(action = '/login' method = 'GET' id = 'login_button') LOG IN
+                button(action = '/register' method = 'GET' id = 'register_button') REGISTER
+            button(action = '/charte' method = 'GET' id = 'charte_button') voire la charte
+            button(action = '/contacts' methos = 'GET' id = 'contact_button') prendre contact

@@ -1,12 +1,10 @@
 doctype html
-head
-    title InkStudies
-    script(src = 'util/jquery.js')
-    script(src = 'navigation/navigation.js')
+html
+    include includes/header.pug
 
-body
-    div
-        h1(align = 'center') ERROR 404
-        h1(align = 'center') PAGE NOT FOUND
+    body
+        div
+            h1(align = 'center') ERROR 404
+            h1(align = 'center') PAGE NOT FOUND
 
-    button(align = 'left' id = 'home_button') return to main page
+        button(align = 'left' id = 'home_button') HOME
