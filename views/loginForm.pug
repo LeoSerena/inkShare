@@ -1,20 +1,18 @@
 doctype html
-head
-   title InkStudies
-   script(src = '/util/jquery.js')
-   script(src = '/navigation/navigation.js')
 
-body
-   title Form Tester
-   h1(align = "center") Welcome to InkStudies
-   button(id = 'home_button') HOME
-   form(action = "/login", method = "POST")
-      div
-         label username:
-         input(name = "credentials" value = "username or password")
-      br
-      div
-         label password:
-         input(name = "password" type = "password")
-      br
-      button(type = "submit") login
+html
+   include includes/header.pug
+
+   body
+      title Form Tester
+      button(id = 'home_button') HOME
+      form(action = "/login", method = "POST")
+         div
+            label username:
+            input(name = "credentials" value = "username or password")
+         br
+         div
+            label password:
+            input(name = "password" type = "password")
+         br
+         button(type = "submit") login

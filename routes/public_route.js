@@ -95,8 +95,8 @@ public_route.post('/login', async function(req, res){
         const user = await User.findOne({
             //can either give username or email
             $or: [
-                { email : req.body.credentials},
-                { username : req.body.credentials}
+                { email : req.body.credentials },
+                { username : req.body.credentials }
             ]
         })
         if(!user) return res.status(400).send('username or password incorrect')
@@ -112,5 +112,10 @@ public_route.post('/login', async function(req, res){
     }
 
 })
+
+//get the logout
+public_route.get('/logout', function(req, res){
+    res.clearCookie('auth-token').render('logout')
+});
 
 module.exports = public_route;

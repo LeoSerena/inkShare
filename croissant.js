@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser')
 var connect = require('./config/mongoDB')
 
 var public_route = require('./routes/public_route');
+var private_route = require('./routes/private_route');
 
 app.use('/util', express.static('util'))
 app.use('/navigation', express.static('navigation'))
@@ -28,6 +29,7 @@ app.use(upload.array());
 app.use(cookieParser());
 
 app.use('/', public_route);
+app.use('/private', private_route)
 app.get('/*', function(req, res){
     res.render('404')
 })
