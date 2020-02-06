@@ -9,7 +9,8 @@ var authenticate = function(req, res, next){
     }else{
         try{
             const verified = jwt.verify(token, process.env.TOKEN_SECRET)
-            req.userId = verified
+            req.userId = verified['_id']
+            req.username = verified['username']
         }catch(err){
             res.status(400).send('The given token is invalid')
         }

@@ -1,11 +1,11 @@
 head
-    script(src = 'util/jquery.js')
-    script(src = 'navigation/navigation.js')
+    script(src = '/util/jquery.js')
+    script(src = '/navigation/navigation.js')
     title Croissant
     h1(align = "center") Welcome to Croissant
-    if(id)
+    if(username)
         div(align = 'right')
-            button(id = 'private_button') my page
+            unless(myPage)
+                button(id = 'private_button') my page
             button(id = 'logout_button') logout
             h3 #{username}
-            h3 #{email}

@@ -1,14 +1,29 @@
 doctype html
-head
-    title InkStudies
-    script(src = '/util/jquery.js')
-    script(src = '/navigation/navigation.js')
+html
+    include includes/header.pug
+        script(src = '/util/functions.js')
 
-body
-    div(align = 'right')
-        h4 #{username}
-        h4 #{email}
-    div
-        h1(align = 'center') private page
+    body
+        button(align = 'left' id = 'home_button') return to main page
 
-    button(align = 'left' id = 'home_button') return to main page
+        div(align = 'center')
+            div(align = 'left')
+                button(id = 'add_book') ajouter un livre
+                form(action="/private/addBook" method = 'POST' id = 'add_book_form')
+                    div
+                        label titre:
+                        input(name = "title" value = "-" class = 'book_form')
+                    br
+                    div
+                        label auteur:
+                        input(name = "author" value = "-" class = 'book_form')
+                    br
+                    div
+                        label date de parution(optionel):
+                        input(name = "release_year" value = "-" class = 'book_form')
+                    br
+                    button(type = "submit" id = 'book_add_submit') ajouter
+        div(align = 'center')
+            label mes livres
+
+            div(id = 'book_container')

@@ -8,6 +8,7 @@ var userLoginSchema = require('../middlewares/validations').userLoginValidation
 var bcrypt = require('bcryptjs')
 var jwt = require('jsonwebtoken');
 
+
 //get the main page
 public_route.get('/homepage', authenticate, async function(req, res){
     const id = req.userId
@@ -15,7 +16,6 @@ public_route.get('/homepage', authenticate, async function(req, res){
         try{
             const user = await User.findOne({_id : id})
             res.render('homepage',{
-                id : id,
                 username : user.username,
                 email : user.email
             })
@@ -106,7 +106,7 @@ public_route.post('/login', async function(req, res){
         if(!isValid){
             return res.status(400).send('username or password incorrect')
         }else{
-            const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET)
+            const token = jwt.sign({_id: user._id, username : user.username}, process.env.TOKEN_SECRET)
             res.cookie('auth-token', token, {maxAge : 1000000}).render('loginSuccessful')
         }
     }

@@ -34,7 +34,21 @@ const loginSchema = Joi.object({
         .pattern(new RegExp('^[a-zA-Z0-9]{7,30}$'))
 })
 
+const bookSchema = Joi.object({
+    title : Joi.string()
+        .max(1024)
+        .required(),
+    author : Joi.string()
+        .required()
+        .max(1024),
+    release_year : Joi.number()
+        .integer()
+        .max(9999)
+        .min(0)
+})
+
 module.exports = {
     'userRegisterationValidation' : userSchema,
-    'userLoginValidation' : loginSchema
+    'userLoginValidation' : loginSchema,
+    'bookAddValidation' : bookSchema
 }
