@@ -1,0 +1,12 @@
+body {
+    background-color: aqua;
+}
+
+.book_delete {
+    color: red;
+    height: 5mm;
+    width: 5mm;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url('/public/images/trash_icon.png');
+}

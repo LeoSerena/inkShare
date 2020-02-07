@@ -30,30 +30,39 @@ private_route.get('/getBooks', async function(req, res){
 })
 
 private_route.post('/addBook', async function(req, res){
-    const username = req.username
     var {error} = bookAddValidation.validate(req.body)
     if(error){
         res.status(400).send(error.details[0].message)
     }else{
-        var book = new Book({
-            'title' : req.body.title,
-            'author' : req.body.author,
-            'release_year' : req.body.release_year,
-            'username' : username
-        })
-        try{
-            var book = await book.save()
-            res.render('privatePage', {username : req.username, myPage : true})
-        }catch(err){
+        const username = req.username
+        if(username){
+            var book = new Book({
+                'title' : req.body.title,
+                'author' : req.body.author,
+                'release_year' : req.body.release_year,
+                'username' : username
+            })
+            try{
+                await book.save()
+                res.redirect('/private/myPage')
+            }catch(err){
+                res.status(400).send(err)
+            }
+        }else{
             res.status(400).send(err)
         }
     }
-
 })
 
-private_route.delete('/removeBook', function(req, res){
-    const username = req.username
-    res.send(username)
+private_route.post('/deleteBook', async function(req, res){
+    let id = req.body['id']
+    try{
+        await Book.deleteOne({_id : id})
+        res.redirect('/public/homepage')
+    }catch(err){
+        res.send(err)
+    }
+
 })
 
 private_route.post('/modifyBook', function(req, res){
