@@ -58,7 +58,7 @@ private_route.post('/deleteBook', async function(req, res){
     let id = req.body['id']
     try{
         await Book.deleteOne({_id : id})
-        res.redirect('/public/homepage')
+        res.send({'id' : id})
     }catch(err){
         res.send(err)
     }

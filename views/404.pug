@@ -1,10 +1,8 @@
 doctype html
 html
     include includes/header.pug
-
+        <link rel = "stylesheet" href = "/css/404.css">
     body
-        div
-            h1(align = 'center') ERROR 404
-            h1(align = 'center') PAGE NOT FOUND
-
-        button(align = 'left' id = 'home_button') HOME
+        div(id = 'err_div')
+            h1(align = 'center' class = 'error') ERROR 404
+            h1(align = 'center' class = 'error') PAGE NOT FOUND

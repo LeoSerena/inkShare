@@ -1,12 +1,79 @@
-body {
-    background-color: aqua;
+#books_div {
+    top: 300px;
+    left: 320px;
+    width: 600px;
+    position: relative;
+}
+
+#book_container{
+    position: relative;
+    top: 0px;
+    bottom: 0;
+}
+
+#book_table {
+    position: relative;
+    left: 0;
+    right: 0;
+    width: 600px;
+    text-align: center;
+    margin: 0;
+    border-collapse: collapse;
+}
+
+#label_p {
+    position: relative;
+    top: 0px;
+    left: 20%;
+    border-radius: 15px 15px 0 0;
+    border: 2px solid black;
+    font-size: 30px;
+    width: 200px;
+    height: 35px;
+    text-align: center;
+    margin: 0;
 }
 
 .book_delete {
-    color: red;
     height: 5mm;
     width: 5mm;
     background-repeat: no-repeat;
     background-size: contain;
     background-image: url('/public/images/trash_icon.png');
+    border-width: 0;
+    background-color: white;
+}
+
+#add_book_div {
+    position: absolute;
+    right: 14px;
+    top: 50px;
+}
+
+#book_table th {
+    border-top: 1px solid black;
+    height: 40px;
+}
+
+#book_table td {
+    border: 1px solid black;
+    height: 30px;
+}
+
+#add_book_form {
+    background-color: white;
+    border: 1px solid black;
+    width: 200px;
+    text-align: center;
+    padding: 5px;
+}
+
+.form_button {
+    color: blue;
+    margin: 15px;
+    border-width: 0;
+}
+
+.book_form {
+    text-align: center;
 }

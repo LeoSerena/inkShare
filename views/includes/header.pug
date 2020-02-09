@@ -1,11 +1,35 @@
 head
     script(src = '/util/jquery.js')
     script(src = '/navigation/navigation.js')
-    title Croissant
-    h1(align = "center") Welcome to Croissant
-    if(username)
+    script(src = '/util/functions.js')
+    link(rel = 'stylesheet' href = '/css/header.css')
+    div(id = 'header_div')
+        button(id = 'home_button') page d'acceuil
+        title Croissant
+        div(id = 'title_div') 
+            h1 Welcome to Croissant
+        if(username)
+            div(id = 'user_div')
+                div(id = 'user_img_div')
+                div(id = 'user_nav_div')
+                    p(id = 'username_p') #{username}
+                div(id = 'user_slide_nav_div')
+                    button(id = 'my_page_button' class = 'slide') mon espace
+                    button(id = 'logout_button' class = 'slide') se déconnecter
         div(align = 'right')
-            unless(myPage)
-                button(id = 'private_button') my page
-            button(id = 'logout_button') logout
-            h3 #{username}
+            table(id = 'nav_table')
+                unless(username)
+                    if(homepage)
+                        tr
+                            td
+                                button(action = '/login' method = 'GET' id = 'login_button') se connecter
+                        tr
+                            td
+                                button(action = '/register' method = 'GET' id = 'register_button') créer un compte
+                tr
+                    td
+                        button(action = '/charte' method = 'GET' id = 'charte_button') voire la charte
+                unless(contact_page)
+                    tr
+                        td 
+                            button(action = '/contacts' methos = 'GET' id = 'contact_button') prendre contact

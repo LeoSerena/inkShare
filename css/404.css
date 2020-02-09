@@ -1,0 +1,10 @@
+.error {
+    position: relative;
+    font-size: 100px;
+}
+
+#err_div{
+    position: absolute;
+    top: 30%;
+    left: 30%;
+}

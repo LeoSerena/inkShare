@@ -35,7 +35,7 @@ $(document).ready(function(){
         })
     });
 
-    $('#private_button').click(function(){
+    $('#my_page_button').click(function(){
         $.ajax({
             type : 'GET',
             success : function(data){

@@ -11,20 +11,8 @@ var jwt = require('jsonwebtoken');
 
 //get the main page
 public_route.get('/homepage', authenticate, async function(req, res){
-    const id = req.userId
-    if(id){ //if the user is authenticated
-        try{
-            const user = await User.findOne({_id : id})
-            res.render('homepage',{
-                username : user.username,
-                email : user.email
-            })
-        }catch(err){
-            res.status(400).send('a problem occured')
-        }
-    }else{ //if user not authenticted
-        res.render('homepage')
-    }
+    const username = req.username
+    res.render('homepage', {username : username, homepage : true})
 })
 
 //get the pdf view of the club rules
@@ -41,16 +29,16 @@ public_route.get('/charte', function(req, res){
 })
 
 //get the contacts
-public_route.get('/contacts', function(req, res){
-    res.render('contacts')
+public_route.get('/contacts', authenticate, function(req, res){
+    res.render('contacts', {username : req.username, contact_page : true})
 })
 //get register file
 public_route.get('/register', function(req, res){
-    res.render('registerForm')
+    res.render('registerForm', {register_page : true})
 })
 //get login file
 public_route.get('/login', function(req, res){
-    res.render('loginForm')
+    res.render('loginForm', {login_page : true})
 })
 
 //post of registeration
@@ -107,7 +95,7 @@ public_route.post('/login', async function(req, res){
             return res.status(400).send('username or password incorrect')
         }else{
             const token = jwt.sign({_id: user._id, username : user.username}, process.env.TOKEN_SECRET)
-            res.cookie('auth-token', token, {maxAge : 1000000}).render('loginSuccessful')
+            res.cookie('auth-token', token, {maxAge : 1000000}).redirect('/private/myPage')
         }
     }
 
@@ -115,7 +103,7 @@ public_route.post('/login', async function(req, res){
 
 //get the logout
 public_route.get('/logout', function(req, res){
-    res.clearCookie('auth-token').render('logout')
+    res.clearCookie('auth-token').redirect('/homepage')
 });
 
 module.exports = public_route;
