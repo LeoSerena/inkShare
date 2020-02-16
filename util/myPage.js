@@ -58,28 +58,61 @@ $(document).ready(function(){
         $('#add_book').show()
     })
 
+
+    
+    $('#add_word').click(function(e){
+        console.log('pushed the button')
+        sortBy('Auteur')
+    })
 })
 
-    //book deletion handler
-    function add_del_button_listener(){
-        $('.book_delete').click(function(e){
-            e.preventDefault()
-            if (confirm('voulez-vous vraiment supprimer ce livre de votre liste?')){
-                let bookId = this.id;
-                console.log('delete book button')
-                $.ajax({
-                    type : 'POST',
-                    url : '/private/deleteBook',
-                    data : {
-                        'id' : bookId
-                    },
-                    success : function(data){
-                        location.reload()
-        
-                    },error(){
-                        $('#book_container').text(err);
-                    }
-                })
-            }
-        })
+//book deletion handler
+function add_del_button_listener(){
+    $('.book_delete').click(function(e){
+        e.preventDefault()
+        if (confirm('voulez-vous vraiment supprimer ce livre de votre liste?')){
+            let bookId = this.id;
+            console.log('delete book button')
+            $.ajax({
+                type : 'POST',
+                url : '/private/deleteBook',
+                data : {
+                    'id' : bookId
+                },
+                success : function(data){
+                    location.reload()
+    
+                },error(){
+                    $('#book_container').text(err);
+                }
+            })
+        }
+    })
+}
+
+function sortBy(collumn){
+    //defines which table we have to sort from what we want to sort
+    if(collumn == 'word'){
+        var table = $('#vocabulary_table')
+    }else{
+        var table = $('#book_table')
     }
+    var rows = table[0].rows
+    var header = rows[0]
+    console.log(header)
+    var x, y, hasSwitched = true
+    while(hasSwitched){
+        hasSwitched = false;
+        for(i = 1; i < (rows.length -1); i++){
+            x = rows[i].getElementByTagName(collumn)[0]
+            y = rows[i+1].getElementByTagName(collumn)[0]
+            console.log(x)
+            if(x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()){
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i])
+                hasSwitched = true;
+                break;
+            }
+        }
+    }
+}
+

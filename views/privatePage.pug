@@ -5,27 +5,40 @@ html
         script(src = '/util/myPage.js')
 
     body
-        //button(align = 'left' id = 'home_button') return to main page
-        div(id = 'books_div')
-            p(id = 'label_p') mes livres
-            div(id = 'book_container')
-            div(id = 'add_book_div' align = 'left')
-                button(id = 'add_book') +
-                form(action="/private/addBook" method = 'POST' id = 'add_book_form')
-                    div
-                        label titre:
-                        input(name = "title"  class = 'book_form')
-                    br
-                    div
-                        label auteur:
-                        input(name = "author"  class = 'book_form')
-                    br
-                    div
-                        label date de parution(optionel):
-                        input(name = "release_year" class = 'book_form')
-                    br
-                    button(class = 'form_button' type = "submit" id = 'book_add_submit') ajouter
-                    button(class = 'form_button' id = 'cancel_add_book_button') annuler
+        div(id = 'tables_container')
+            div(id = 'books_div')
+                p(class = 'labels' id = 'label_book_p') mes livres
+                div(id = 'book_container')
+                div(id = 'add_book_div' align = 'left')
+                    button(id = 'add_book') +
+                    form(action="/private/addBook" method = 'POST' id = 'add_book_form')
+                        div
+                            label titre:
+                            input(name = "title"  class = 'book_form')
+                        br
+                        div
+                            label auteur:
+                            input(name = "author"  class = 'book_form')
+                        br
+                        div
+                            label date de parution(optionel):
+                            input(name = "release_year" class = 'book_form')
+                        br
+                        button(class = 'form_button' type = "submit" id = 'book_add_submit') ajouter
+                        button(class = 'form_button' id = 'cancel_add_book_button') annuler
 
-        div(id = 'vocabulary_div')
-            div(id = 'add_word_div')
+            div(id = 'vocabulary_div')
+                p(class = 'labels' id = 'label_vocabulary_p') ma liste de mots
+                div(id = 'vocabulary_container')
+                div(id = 'add_word_div')
+                    button(id = 'add_word') +
+                    form(action="/private/addWord" method = 'POST' id = 'add_word_form')
+                        div
+                            label mot:
+                            input(name = "title"  class = 'book_form')
+                        br
+                        div
+                            label définition:
+                            input(name = "author"  class = 'book_form')
+                        button(class = 'form_button' type = "submit" id = 'book_add_submit') ajouter
+                        button(class = 'form_button' id = 'cancel_add_book_button') annuler

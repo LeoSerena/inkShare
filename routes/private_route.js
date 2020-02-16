@@ -7,10 +7,12 @@ var bookAddValidation = require('../middlewares/validations').bookAddValidation
 
 private_route.use(authenticate)
 
+//display the private page of the user
 private_route.get('/myPage', function(req, res){
     res.render('privatePage', {username : req.username, myPage : true})
 })
 
+//fetches the books of the user to be displayed on its private page
 private_route.get('/getBooks', async function(req, res){
     const username = req.username
     try{
@@ -29,6 +31,7 @@ private_route.get('/getBooks', async function(req, res){
     }
 })
 
+//stored a new book from the user in the database
 private_route.post('/addBook', async function(req, res){
     var {error} = bookAddValidation.validate(req.body)
     if(error){
@@ -54,6 +57,7 @@ private_route.post('/addBook', async function(req, res){
     }
 })
 
+//deletes the book given
 private_route.post('/deleteBook', async function(req, res){
     let id = req.body['id']
     try{
@@ -65,9 +69,14 @@ private_route.post('/deleteBook', async function(req, res){
 
 })
 
+//toDo
 private_route.post('/modifyBook', function(req, res){
     const username = req.username
     res.send(username)
+})
+//toDo
+private_route.post('/addWord', function(req, res){
+
 })
 
 module.exports = private_route

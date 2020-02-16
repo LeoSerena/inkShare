@@ -11,11 +11,9 @@ $(document).ready(function(){
     })
     $('#user_nav_div').click(function(){
         let user_nav = $('#user_slide_nav_div')
-        if(user_nav.is(':visible')){
-            user_nav.hide()
-        }else{
-            user_nav.show()
-        }
+        user_nav.animate({
+            height : 'toggle'
+        })
     })
     $('#nav_table button').hover(function(){
         $(this).css('color', 'lightblue')
