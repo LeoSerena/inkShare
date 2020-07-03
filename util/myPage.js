@@ -1,5 +1,6 @@
 $(document).ready(function(){
 
+    //---------------- BOOKS HANDLING -------------------
     //fetches the books of the user in the database and displays it
     $.ajax({
         type : 'GET',
@@ -20,19 +21,17 @@ $(document).ready(function(){
                 book_table.append(book_table_header)
 
                 //adds all the books
-                var i = 1;
-                data.forEach(elem =>{
+                data.forEach((elem, i)=>{
                     let book_row = $('<tr>')
-                    book_row.append($(`<td>${i}</td>`))
+                    book_row.append($(`<td>${i+1}</td>`))
                     book_row.append($(`<td>${elem['author']}</td>`))
                     book_row.append($(`<td>${elem['release_year']}</td>`))
                     book_row.append($(`<td>${elem['title']}</td>`))
                     book_row.append($(`<td class = 'no_border'><button class = 'book_delete' id = ${elem['_id']}></button></td>`))
                     book_table.append(book_row)
-                    i++;
                 })
                 $('#book_container').append(book_table)
-                add_del_button_listener();
+                add_del_button_listener('book');
 
             }else{
                 $('#book_container').text("pas de livre enregistrés pour l'instant")
@@ -58,61 +57,81 @@ $(document).ready(function(){
         $('#add_book').show()
     })
 
+    //---------------------- WORDS HANDLING -------------------
+    // fetches the words of the user and displays them
+    $.ajax({
+        type : 'GET',
+        url : '/private/getWords',
+        success : function(data){
+            $('#vocabulary_container').empty()
+            if(data['length'] != 0){
+                word_table = $(`<table id = 'word_table'>`)
+                word_table_header = $(`<tr>`)
+                word_table_header.append(`<th class = 'no_border'></th>`)
+                word_table_header.append(`<th class = book_header>word</th>`)
+                word_table_header.append(`<th class = book_header>date</th>`)
+                word_table_header.append(`<th class = 'no_border'> <button id = 'add_word'> + </th>`)
+                word_table.append(word_table_header)
 
-    
-    $('#add_word').click(function(e){
-        console.log('pushed the button')
-        sortBy('Auteur')
+
+                data.forEach((elem, i) => {
+                    let word_row = $('<tr>')
+                    word_row.append($(`<td>${i+1}</td>`))
+                    word_row.append($(`<td>${elem['word']}</td>`))
+                    word_row.append($(`<td>${elem['date'].substring(0,10)}</td>`))
+                    word_row.append($(`<td class = 'no_border'><button class = 'word_delete' id = ${elem['_id']}></button></td>`))
+                    word_table.append(word_row)
+                })
+                $('#vocabulary_container').append(word_table)
+                $('#add_word').click(() => {
+                    $('#add_word_form').show()
+                })
+                add_del_button_listener('word');
+            }else{
+                $('#vocabulary_container').text('aucun mot enregistré pour le moment')
+            }
+        },
+        error(err){
+            $('#word_container').text(err);
+        }
     })
+    $('#cancel_add_word_button').click(function(e){
+        e.preventDefault()
+        $('#add_word_form').hide()
+    })
+    $('#add_word_form').hide()
 })
 
 //book deletion handler
-function add_del_button_listener(){
-    $('.book_delete').click(function(e){
-        e.preventDefault()
-        if (confirm('voulez-vous vraiment supprimer ce livre de votre liste?')){
-            let bookId = this.id;
-            console.log('delete book button')
-            $.ajax({
-                type : 'POST',
-                url : '/private/deleteBook',
-                data : {
-                    'id' : bookId
-                },
-                success : function(data){
-                    location.reload()
-    
-                },error(){
-                    $('#book_container').text(err);
-                }
-            })
-        }
-    })
-}
-
-function sortBy(collumn){
-    //defines which table we have to sort from what we want to sort
-    if(collumn == 'word'){
-        var table = $('#vocabulary_table')
-    }else{
-        var table = $('#book_table')
-    }
-    var rows = table[0].rows
-    var header = rows[0]
-    console.log(header)
-    var x, y, hasSwitched = true
-    while(hasSwitched){
-        hasSwitched = false;
-        for(i = 1; i < (rows.length -1); i++){
-            x = rows[i].getElementByTagName(collumn)[0]
-            y = rows[i+1].getElementByTagName(collumn)[0]
-            console.log(x)
-            if(x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()){
-                rows[i].parentNode.insertBefore(rows[i + 1], rows[i])
-                hasSwitched = true;
-                break;
+function add_del_button_listener(type){
+    if(type == 'book'){
+        $('.book_delete').click(function(e){
+            e.preventDefault()
+            if (confirm('voulez-vous vraiment supprimer ce livre de votre liste?')){
+                let bookId = this.id;
+                $.ajax({
+                    type : 'POST',
+                    url : '/private/deleteBook',
+                    data : {'id' : bookId},
+                    success : function(data){location.reload()},
+                    error(){$('#book_container').text(err);}
+                })
             }
-        }
+        })
+    }else{
+        $('.word_delete').click(function(e){
+            e.preventDefault()
+            if (confirm('voulez-vous vraiment supprimer ce mot de votre liste?')){
+                let wordId = this.id;
+                $.ajax({
+                    type : 'POST',
+                    url : '/private/deleteWord',
+                    data : {'id' : wordId},
+                    success : function(data){location.reload()},
+                    error(){$('#word_container').text(err);}
+                })
+            }
+        })
     }
 }
 

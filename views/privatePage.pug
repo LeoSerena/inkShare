@@ -31,14 +31,14 @@ html
                 p(class = 'labels' id = 'label_vocabulary_p') ma liste de mots
                 div(id = 'vocabulary_container')
                 div(id = 'add_word_div')
-                    button(id = 'add_word') +
                     form(action="/private/addWord" method = 'POST' id = 'add_word_form')
                         div
                             label mot:
-                            input(name = "title"  class = 'book_form')
+                            input(name = "word"  class = 'word_input')
                         br
                         div
                             label définition:
-                            input(name = "author"  class = 'book_form')
-                        button(class = 'form_button' type = "submit" id = 'book_add_submit') ajouter
-                        button(class = 'form_button' id = 'cancel_add_book_button') annuler
+                            textarea(name="definition_input", cols="40", rows="12")
+                        br
+                        button(class = 'form_button' type = "submit" id = 'word_add_submit') ajouter
+                        button(class = 'form_button' id = 'cancel_add_word_button') annuler

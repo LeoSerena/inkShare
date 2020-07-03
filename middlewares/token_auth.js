@@ -1,3 +1,4 @@
+
 const jwt = require('jsonwebtoken');
 
 var authenticate = function(req, res, next){

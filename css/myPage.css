@@ -1,6 +1,5 @@
 #tables_container {
     position: relative;
-    border: 1px solid blue;
     left : 17%;
     top: 200px;
     width: 1200px;
@@ -16,7 +15,6 @@
     right: 0;
     top: 0;
     position: absolute;
-    border: 1px solid red;
 }
 
 #book_container{
@@ -30,6 +28,15 @@
     left: 0;
     right: 0;
     width: 600px;
+    text-align: center;
+    margin: 0;
+    border-collapse: collapse;
+}
+
+#word_table {
+    position: relative;
+    right: 0;
+    width: 400px;
     text-align: center;
     margin: 0;
     border-collapse: collapse;
@@ -60,13 +67,36 @@
     background-color: white;
 }
 
+.word_delete {
+    height: 5mm;
+    width: 5mm;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url('/public/images/trash_icon.png');
+    border-width: 0;
+    background-color: white;
+}
+
 #add_book_div {
     position: absolute;
     right: 14px;
     top: 50px;
 }
 
+#add_word_div {
+    position: absolute;
+    right: -35px;
+    top: 60px;
+}
+
+
 #book_table th {
+    border-top: 1px solid black;
+    height: 40px;
+}
+
+
+#word_table th {
     border-top: 1px solid black;
     height: 40px;
 }
@@ -76,10 +106,23 @@
     height: 30px;
 }
 
+#word_table td {
+    border: 1px solid black;
+    height: 30px;
+}
+
 #add_book_form {
     background-color: white;
     border: 1px solid black;
     width: 200px;
+    text-align: center;
+    padding: 5px;
+}
+
+#add_word_form {
+    background-color: white;
+    border: 1px solid black;
+    width: 80%;
     text-align: center;
     padding: 5px;
 }
