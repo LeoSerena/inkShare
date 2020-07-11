@@ -5,7 +5,6 @@ var multer = require('multer');
 var upload = multer();
 var cookieParser = require('cookie-parser')
 var connect = require('./config/mongoDB')
-var tokenAuth = require('./middlewares/token_auth')
 
 var public_route = require('./routes/public_route');
 var private_route = require('./routes/private_route');
@@ -26,9 +25,6 @@ app.set('views','./views');
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(upload.array());
-
-//middlewares
-//app.use(tokenAuth)
 
 //cookies
 app.use(cookieParser());

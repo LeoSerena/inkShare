@@ -10,6 +10,7 @@ var authenticate = function(req, res, next){
     }else{
         try{
             const verified = jwt.verify(token, process.env.TOKEN_SECRET)
+            if ((Date.now() - verified['ait']) / 60000 > 30) return res.status(400).send('the token is no longer valid, please relogin')
             req.userId = verified['_id']
             req.username = verified['username']
         }catch(err){

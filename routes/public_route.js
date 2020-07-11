@@ -94,8 +94,8 @@ public_route.post('/login', async function(req, res){
         if(!isValid){
             return res.status(400).send('username or password incorrect')
         }else{
-            const token = jwt.sign({_id: user._id, username : user.username}, process.env.TOKEN_SECRET)
-            res.cookie('auth-token', token, {maxAge : 1000000}).redirect('/private/myPage')
+            const token = jwt.sign({_id: user._id, username : user.username, ait : Date.now()}, process.env.TOKEN_SECRET, {expiresIn : '30m'})
+            res.cookie('auth-token', token, {maxAge : 1800000}).redirect('/private/myPage')
         }
     }
 

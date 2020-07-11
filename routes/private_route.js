@@ -3,6 +3,7 @@ var private_route = express.Router();
 var authenticate = require('../middlewares/token_auth')
 var Book = require('../models/Book')
 var Word = require('../models/Word')
+const jwt = require('jsonwebtoken');
 var bookAddValidation = require('../middlewares/validations').bookAddValidation
 var wordAddValidation = require('../middlewares/validations').wordAddValidation
 
@@ -11,7 +12,9 @@ private_route.use(authenticate)
 
 //display the private page of the user
 private_route.get('/myPage', function(req, res){
-    res.render('privatePage', {username : req.username, myPage : true})
+    // an easy solution (maybe bad) was to refresh the token when accessing the private page
+    const token = jwt.sign({_id: req.userId, username : req.username, ait : Date.now()}, process.env.TOKEN_SECRET, {expiresIn : '30m'})
+    res.cookie('auth-token', token, {maxAge : 1800000}).render('privatePage', {username : req.username, myPage : true})
 })
 
 // ----------- BOOKS --------------
