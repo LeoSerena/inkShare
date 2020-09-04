@@ -108,7 +108,7 @@
 }
 
 #nav_table {
-    position: fixed;
+    position: absolute;
     top: 180px;
     left: 10px;
     border: 1px solid black;

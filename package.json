@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon croissant.js",
-    "build" : "webpack croissant.js dist/bundle.js -p"
+    "build": "webpack croissant.js dist/bundle.js -p"
   },
   "repository": {
     "type": "git",

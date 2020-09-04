@@ -321,8 +321,8 @@ var express = require('express');
 var app = express();
 
 app.get('/things/:name/:id', function(req, res) {
-   console.log(rep.params.id)
-   console.log(rep.params.name)
+   console.log(req.params.id)
+   console.log(req.params.name)
 });
 app.listen(3000);
 ```

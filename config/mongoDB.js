@@ -11,7 +11,8 @@ var connect = async function(){
         mongoose.connect(
             str,
             { useNewUrlParser : true,
-             useUnifiedTopology: true },
+             useUnifiedTopology: true ,
+            useFindAndModify : false},
             ()=> console.log('connected to db')
         )
     }catch(err){
@@ -21,11 +22,6 @@ var connect = async function(){
 }
 
 
-const user = new User({
-    name : 'Bernard Minet',
-    email : 'bernard.minet@yahoo.fr',
-    password : 'clubDo'
-})
 
 var postUser = async function(){
     try{

@@ -43,6 +43,7 @@
 }
 
 .labels {
+    background-color: cyan;
     position: relative;
     top: 0px;
     left: 20%;
@@ -54,20 +55,11 @@
     text-align: center;
     margin: 0;
     border-bottom: 0;
+    cursor: pointer;
 }
 
 
 .book_delete {
-    height: 5mm;
-    width: 5mm;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-image: url('/public/images/trash_icon.png');
-    border-width: 0;
-    background-color: white;
-}
-
-.word_delete {
     height: 5mm;
     width: 5mm;
     background-repeat: no-repeat;
@@ -135,4 +127,76 @@
 
 .book_form {
     text-align: center;
+}
+
+#notes_header{
+    background-color: steelblue;
+    padding : 10px;
+    border-radius: 15px 15px 0 0;
+    border: 1px solid black;
+}
+
+#notes_title_div{
+    margin: 5px;
+    left: 0;
+}
+
+#notes_title_div h3{
+    font-size: 30px;
+    display: inline;
+    margin-left: 4px;
+    cursor: pointer;
+}
+
+#title{
+    font-style: italic;
+    cursor: pointer;
+    display: inline-block;
+}
+
+
+#author{
+    position: relative;
+    font-size: 25px;
+    left: 20px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+#release_year{
+    display: inline-block;
+    left: 10px;
+}
+
+#notes_dates{
+    position: relative;
+    font-size: 12px;
+    padding: 0;
+    margin: 0;
+    text-align: right;
+}
+
+#notes_save_button{
+    position: absolute;
+    right: 20px;
+    top : 20px;
+    height: 10mm;
+    width: 10mm;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url('/public/images/save_icon.png');
+    border-width: 0;
+    background-color: steelblue;
+}
+
+#notes_input{
+    position: relative;
+    width: 93%;
+    padding: 3px;
+    resize: vertical;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 20px;
+    padding : 15px;
+    border-top: 0;
+    left: 1px;
 }

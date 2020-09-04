@@ -10,35 +10,8 @@ html
                 p(class = 'labels' id = 'label_book_p') mes livres
                 div(id = 'book_container')
                 div(id = 'add_book_div' align = 'left')
-                    button(id = 'add_book') +
-                    form(action="/private/addBook" method = 'POST' id = 'add_book_form')
-                        div
-                            label titre:
-                            input(name = "title"  class = 'book_form')
-                        br
-                        div
-                            label auteur:
-                            input(name = "author"  class = 'book_form')
-                        br
-                        div
-                            label date de parution(optionel):
-                            input(name = "release_year" class = 'book_form')
-                        br
-                        button(class = 'form_button' type = "submit" id = 'book_add_submit') ajouter
-                        button(class = 'form_button' id = 'cancel_add_book_button') annuler
+
 
             div(id = 'vocabulary_div')
-                p(class = 'labels' id = 'label_vocabulary_p') ma liste de mots
+                p(class = 'labels' id = 'label_vocabulary_p') mes listes
                 div(id = 'vocabulary_container')
-                div(id = 'add_word_div')
-                    form(action="/private/addWord" method = 'POST' id = 'add_word_form')
-                        div
-                            label mot:
-                            input(name = "word"  class = 'word_input')
-                        br
-                        div
-                            label définition:
-                            textarea(name="definition_input", cols="40", rows="12")
-                        br
-                        button(class = 'form_button' type = "submit" id = 'word_add_submit') ajouter
-                        button(class = 'form_button' id = 'cancel_add_word_button') annuler

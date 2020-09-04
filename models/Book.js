@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const bookSchema = new mongoose.Schema({
+    userId : {
+        type : mongoose.Schema.Types.ObjectId,
+        require : true,
+        ref : 'User'
+    },
     title : {
         type: String,
         require: true
@@ -13,13 +18,17 @@ const bookSchema = new mongoose.Schema({
         type: Number,
         default: 0
     },
-    date_of_creation: {
+    creation_date: {
         type: Date,
         default: Date.now
     },
-    username: {
-        type: String,
-        require : true
+    notes : {
+        type : String,
+        default : ''
+    },
+    last_modif : {
+        type : Date,
+        default : Date.now
     }
 })
 

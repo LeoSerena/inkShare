@@ -47,19 +47,22 @@ const bookSchema = Joi.object({
         .min(0)
 })
 
-const wordSchema = Joi.object({
-    word : Joi.string()
-        .max(1024)
-        .min(1)
-        .required(),
-    definition_input : Joi.string()
-        .max(16384)
-
+const listSchema = Joi.object({
+    original_creator : Joi.string()
+                            .min(5)
+                            .max(255)
+                            .alphanum()
+                            .required(),
+    name : Joi.string()
+            .min(1)
+            .max(255)
+            .required()
 })
+
 
 module.exports = {
     'userRegisterationValidation' : userSchema,
     'userLoginValidation' : loginSchema,
     'bookAddValidation' : bookSchema,
-    'wordAddValidation' : wordSchema
+    'listAddValidation' : listSchema
 }
