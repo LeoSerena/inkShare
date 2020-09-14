@@ -19,8 +19,62 @@ private_route.get('/myPage', function(req, res){
 })
 
 //------------ LISTS --------------
+// fetched the lists that are displayed in private page
+private_route.get('/getLists', function(req, res){
+    User.findOne(
+        {_id : req.userId},
+        'my_lists fav_lists',
+        function(err, usr){
+            if(err){res.status(400).send(err)}
+            else{
+                List.find({_id : {$in : usr['my_lists']}},
+                function(err, my_lists){
+                    if(err){res.status(400).send(err)}
+                    else{
+                        List.find({_id : {$in : usr['fav_lists']}},
+                        function(err, fav_lists){
+                            if(err){res.status(400).send(err)}
+                            else{
+                                let body = {}
+                                body['my_lists'] = my_lists
+                                body['fav_lists'] = fav_lists
+                                res.send(body)
+                            }
+                        })
+                    }
+                })
+            }
+        }
+    )
+})
 
+// adds a new list
+private_route.post('/addList', function(req, res){
 
+    //validate list
+    let list_name = req.body['name']
+    let creator = req.userId
+    let themes = req.body['themes']
+
+    let list = new List({
+        original_creator : creator,
+        name : list_name,
+        themes : themes
+    })
+
+    
+    list.save(function(err, list){
+        if(err){ res.status(400).send(err) }
+        else{     
+            User.findOneAndUpdate(
+            { _id : req.userId },
+            { $push : {my_lists : list._id}},
+            function(err){ 
+                if(err){ res.status(400).send(err) }
+                else{ res.redirect('/private/myPage') } 
+            })} 
+    })
+})
 
 // ----------- BOOKS --------------
 //fetches the books of the user to be displayed on its private page
@@ -87,7 +141,7 @@ private_route.post('/modifyBook', function(req, res){
             'notes' : req.body['notes'],
             'last_modif' : Date.now()
         }},
-        function(err){if(err) { res.send(err) } else { res.redirect('/private/myPage') }})
+        function(err){if(err) { res.send(err) }})
 })
 
 private_route.get('/myBooks/notes/:id', function(req, res){
@@ -101,12 +155,5 @@ private_route.get('/myBooks/notes/:id', function(req, res){
             }
         })
 })
-
-
-private_route.post('/modifyNote', function(req, res){
-
-})
-
-
 
 module.exports = private_route

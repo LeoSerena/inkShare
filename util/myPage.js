@@ -7,7 +7,97 @@ $(document).ready(function(){
     //---------------- BOOKS HANDLING -------------------
     //fetches the books of the user in the database and displays it in the div
     displayBooks()
+    //---------------- LISTS HANDLING -------------------
+    displayLists()
 })
+
+function displayLists(){
+    let add_list_div = $('#add_list_div')
+    add_list_div.empty()
+    add_list_div.append($(`<button id = 'add_list'>`).text('+'))
+
+    let form = $(`<form action = '/private/addList' method = 'POST' id = 'add_list_form'>`)
+
+    let name_form_div = $(`<div>`)
+    name_form_div.append($(`<label>`).text('nom de la liste'))
+    name_form_div.append($(`<input class = 'list_form' name = 'name'>`))
+    form.append(name_form_div)
+    form.append('<br>')
+
+    let themes_form_div = $(`<div>`)
+    themes_form_div.append($(`<label>`).text('thèmes'))
+    themes_form_div.append($(`<input class = 'list_form' name = 'themes'>`))
+    form.append(themes_form_div)
+    form.append('<br>')
+
+    form.append($(`<button class = 'form_button' type = 'submit' id = 'list_add_submit'>`).text('ajouter'))
+    form.append($(`<button class = 'form_button' id = 'cancel_add_list_button'>`).text('annuler'))
+
+    add_list_div.append(form)
+
+    form.hide()
+
+    add_lists_listener(form)
+
+    $.ajax({
+        type : 'GET',
+        url : '/private/getLists',
+        success : function(data){
+            let my_lists = data['my_lists']
+            let fav_lists = data['fav_lists']
+
+
+            my_lists_table = $(`<table id = 'my_lists_table'>`)
+            fav_lists_table = $(`<table id = 'fav_lists_table'>`)
+
+            // headers
+
+            my_lists_table.append('<tr>').append('<th>my lists</th>')
+            fav_lists_table.append('<tr>').append('<th>favourite lists</th>')
+
+            my_lists_header = my_lists_table.append('<tr>')
+            fav_lists_header = fav_lists_table.append('<tr>')
+
+            my_lists_header.append(`<th class = 'no_border'></th>`)
+            fav_lists_header.append(`<th class = 'no_border'></th>`)
+            my_lists_header.append($('<th class = book_header>Name</th>'))
+            fav_lists_header.append($('<th class = book_header>Name</th>'))
+            my_lists_header.append($('<th class = book_header>number of elements</th>'))
+            fav_lists_header.append($('<th class = book_header>number of elements</th>'))
+
+            // adding the rows
+            my_lists.forEach((list, i) => {
+                let list_row = $('<tr>')
+                list_row.append($(`<td>${i+1}</td>`))
+                list_row.append($(`<td>${list['name']}</td>`))
+                list_row.append($(`<td>${list['size']}</td>`))
+                list_row.append($(`<td class = 'no_border'><button class = 'book_delete' id = ${list['_id']}></button></td>`))
+                my_lists_table.append(list_row)
+            })
+            fav_lists.forEach((list, i) => {
+                let list_row = $('<tr>')
+                list_row.append($(`<td>${i+1}</td>`))
+                list_row.append($(`<td>${list['name']}</td>`))
+                list_row.append($(`<td>${list['size']}</td>`))
+                list_row.append($(`<td class = 'no_border'><button class = 'book_delete' id = ${list['_id']}></button></td>`))
+                fav_lists_table.append(list_row)
+            })
+            $('#my_list_container').append(my_lists_table)
+            $('#fav_list_container').append(fav_lists_table)
+    }})
+}
+
+function add_lists_listener(form){
+    $('#add_list').click(function(e){
+        e.preventDefault()
+        form.show()
+    })
+    $('#cancel_add_list_button').click(function(e){
+        e.preventDefault()
+        form.hide()
+        $('#add_list').show()
+    })
+}
 
 // displays the books of the user in the container
 function displayBooks(){
@@ -185,7 +275,7 @@ function displayNotes(book_id, titre, auteur, date_de_parution, date_de_créatio
 
     cont.append(header)
 
-    let notes_input = $(`<textarea id = 'notes_input' placeholder = 'Écris tes notes sur le livre ici...' rows = 15>`)
+    let notes_input = $(`<textarea id = 'notes_input' maxlength = 100000 placeholder = 'Écris tes notes sur le livre ici...' rows = 15>`)
     if(notes){ notes_input.val(notes) }
     
     cont.append(notes_input)
@@ -209,8 +299,7 @@ function save(book_id){
                 'author' : author,
                 'release_year' : release_year,
                 'notes' : notes
-            },
-            error(err){$('#book_container').text(err);}
+            },error(err){$('#book_container').text(err);}
         })
     }
     changes = false

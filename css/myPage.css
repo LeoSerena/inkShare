@@ -10,7 +10,7 @@
     position: relative;
 }
 
-#vocabulary_div {
+#list_div {
     width: 400px;
     right: 0;
     top: 0;
@@ -28,15 +28,6 @@
     left: 0;
     right: 0;
     width: 600px;
-    text-align: center;
-    margin: 0;
-    border-collapse: collapse;
-}
-
-#word_table {
-    position: relative;
-    right: 0;
-    width: 400px;
     text-align: center;
     margin: 0;
     border-collapse: collapse;
@@ -71,16 +62,9 @@
 
 #add_book_div {
     position: absolute;
-    right: 14px;
+    right: 4px;
     top: 50px;
 }
-
-#add_word_div {
-    position: absolute;
-    right: -35px;
-    top: 60px;
-}
-
 
 #book_table th {
     border-top: 1px solid black;
@@ -98,23 +82,10 @@
     height: 30px;
 }
 
-#word_table td {
-    border: 1px solid black;
-    height: 30px;
-}
-
 #add_book_form {
     background-color: white;
     border: 1px solid black;
     width: 200px;
-    text-align: center;
-    padding: 5px;
-}
-
-#add_word_form {
-    background-color: white;
-    border: 1px solid black;
-    width: 80%;
     text-align: center;
     padding: 5px;
 }
@@ -165,7 +136,6 @@
 
 #release_year{
     display: inline-block;
-    left: 10px;
 }
 
 #notes_dates{
@@ -199,4 +169,24 @@
     padding : 15px;
     border-top: 0;
     left: 1px;
+}
+
+#add_list_div{
+    position: absolute;
+}
+
+#list_div{
+    display: inline-block;
+}
+
+#my_lists_table{
+    width: 50%;
+    float: left;
+    border: solid 1px blue;
+}
+
+#fav_lists_table{
+    width: 50%;
+    float: right;
+    border: solid 1px red;
 }

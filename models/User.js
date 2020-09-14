@@ -19,7 +19,8 @@ const userSchema = new mongoose.Schema({
         default: Date.now
     },
     friend_list : [{type : Schema.Types.ObjectId, ref : 'User'}],
-    lists : [{type : Schema.Types.ObjectId, ref : 'List'}]
+    my_lists : [{type : Schema.Types.ObjectId, ref : 'List'}],
+    fav_lists : [{type : Schema.Types.ObjectId, ref : 'List'}]
 })
 
 module.exports = mongoose.model('User', userSchema)

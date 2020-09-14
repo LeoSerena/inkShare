@@ -1,7 +1,8 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const { ObjectID } = require('mongodb');
 const Schema = mongoose.Schema;
 
-const wordSchema = new mongoose.Schema({
+const elementSchema = new mongoose.Schema({
     element1 : {
         type : String,
         required : true,
@@ -18,7 +19,7 @@ const listSchema = new Schema({
         default : Date.now,
     },
     original_creator : {
-        type : String,
+        type : ObjectID,
         required : true,
     },
     last_modification : {
@@ -29,13 +30,17 @@ const listSchema = new Schema({
         type : String,
         required : true,
     },
+    themes : {type : String},
     size : {
         type : Number,
         default : 0,
-    }, 
-    read_rights : [{type : Schema.Types.ObjectId, ref : 'User'}],
+    },
+    read_rights : {
+        type : [String],
+        default : ['owner']
+    },
     write_rights : [{type : Schema.Types.ObjectId, ref : 'User'}],
-    list : [{type : wordSchema}]
+    list : [{type : elementSchema}]
 })
 
 module.exports = mongoose.model('List', listSchema)
