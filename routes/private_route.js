@@ -76,6 +76,12 @@ private_route.post('/addList', function(req, res){
     })
 })
 
+private_route.get('/list/:id', function(req, res){
+    console.log('yes')
+    console.log(req.id)
+    res.render('list_page', {username : req.username, book_id : req.id})
+})
+
 // ----------- BOOKS --------------
 //fetches the books of the user to be displayed on its private page
 private_route.get('/getBooks', function(req, res){

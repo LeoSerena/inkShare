@@ -13,7 +13,7 @@
     left: 0;
     top: 0;
     bottom: 0;
-    width: 300px;
+    width: 17%;
     background-color: steelblue;
     border-width: 0;
     font-size: 40px;
@@ -109,15 +109,16 @@
 
 #nav_table {
     position: absolute;
+    width: 15%;
     top: 180px;
-    left: 10px;
+    left: 1%;
     border: 1px solid black;
 }
 
 #nav_table button {
     border: hidden;
     background-color: aqua;
-    width: 270px;
+    width: 100%;
     height: 80px;
     border: 1px solid black;
     font-size: 30px;

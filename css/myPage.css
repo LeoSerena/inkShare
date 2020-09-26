@@ -1,18 +1,18 @@
 #tables_container {
     position: relative;
-    left : 17%;
+    left : 18%;
     top: 200px;
-    width: 1200px;
+    width: 70%;
 }
 
 #books_div {
-    width: 600px;
+    width: 56.3%;
     position: relative;
 }
 
 #list_div {
-    width: 400px;
-    right: 0;
+    width: 50%;
+    left: 60%;
     top: 0;
     position: absolute;
 }
@@ -27,7 +27,7 @@
     position: relative;
     left: 0;
     right: 0;
-    width: 600px;
+    width: 100%;
     text-align: center;
     margin: 0;
     border-collapse: collapse;
@@ -41,7 +41,7 @@
     border-radius: 15px 15px 0 0;
     border: 2px solid black;
     font-size: 30px;
-    width: 200px;
+    width: 30%;
     height: 35px;
     text-align: center;
     margin: 0;
@@ -62,8 +62,8 @@
 
 #add_book_div {
     position: absolute;
-    right: 4px;
-    top: 50px;
+    right: 1%;
+    top: 48px;
 }
 
 #book_table th {

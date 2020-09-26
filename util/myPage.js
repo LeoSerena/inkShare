@@ -60,10 +60,10 @@ function displayLists(){
 
             my_lists_header.append(`<th class = 'no_border'></th>`)
             fav_lists_header.append(`<th class = 'no_border'></th>`)
-            my_lists_header.append($('<th class = book_header>Name</th>'))
-            fav_lists_header.append($('<th class = book_header>Name</th>'))
-            my_lists_header.append($('<th class = book_header>number of elements</th>'))
-            fav_lists_header.append($('<th class = book_header>number of elements</th>'))
+            my_lists_header.append($('<th class = book_header>Nom</th>'))
+            fav_lists_header.append($('<th class = book_header>Nom</th>'))
+            my_lists_header.append($('<th class = book_header>taille</th>'))
+            fav_lists_header.append($('<th class = book_header>taille</th>'))
 
             // adding the rows
             my_lists.forEach((list, i) => {
@@ -72,6 +72,9 @@ function displayLists(){
                 list_row.append($(`<td>${list['name']}</td>`))
                 list_row.append($(`<td>${list['size']}</td>`))
                 list_row.append($(`<td class = 'no_border'><button class = 'book_delete' id = ${list['_id']}></button></td>`))
+                list_row.click(function(){
+                    window.location.href = `/private/list/${list['_id']}`
+                })
                 my_lists_table.append(list_row)
             })
             fav_lists.forEach((list, i) => {
