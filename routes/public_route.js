@@ -28,6 +28,10 @@ public_route.get('/charte', function(req, res){
     })
 })
 
+public_route.get('/testing', function(req, res){
+    res.render('test', {username : req.username})
+})
+
 //get the contacts
 public_route.get('/contacts', authenticate, function(req, res){
     res.render('contacts', {username : req.username, contact_page : true})
