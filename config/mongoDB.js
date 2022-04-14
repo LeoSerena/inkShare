@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 var dotenv = require('dotenv')
-var User = require('../models/User.js')
 
 dotenv.config();
 
@@ -10,10 +9,12 @@ var connect = async function(){
     try{
         mongoose.connect(
             str,
-            { useNewUrlParser : true,
-             useUnifiedTopology: true ,
-            useFindAndModify : false},
-            ()=> console.log('connected to db')
+            {
+                useNewUrlParser : true,
+                useUnifiedTopology: true,
+                //useFindAndModify : false
+            },
+            () => console.log('connected to db')
         )
     }catch(err){
         console.error(err)

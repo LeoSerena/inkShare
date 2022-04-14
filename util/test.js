@@ -23,24 +23,36 @@ class Table extends React.Component {
     constructor(props){
         super(props)
 
-        let list = [
-            {id: 85, name: 'Paul', age: 33},
-            {id: 31, name: 'Monica', age: 45},
-            {id: 84, name: 'Jenifer', age: 20}
-        ]
-
-
-        let headers = Object.keys(list[0])
-        headers.shift()
-        
         this.state = {
-            list : list,
-            headers : headers
+            list : [],
+            headers : []
         }
+
         this.handleSortClick = this.handleSortClick.bind(this)
     }
 
-    componentDidMount(){}
+    componentDidMount(){
+        $.ajax({
+            type : 'GET',
+            url : '/private/getBooks',
+            success : (data) => {
+                if(data['length'] == 0){
+                    this.setState({
+                        list : [],
+                        headers : []
+                    })
+                }else{
+                    let headers = Object.keys(data[0])
+                    headers.shift()
+            
+                    this.setState({
+                        list : data,
+                        headers : headers
+                    })
+                }
+            }
+        })
+    }
     componentWillUnmount(){}
 
     // Here we KNOW the "this" that will be called will be the Table and not the Row when executed on the header
