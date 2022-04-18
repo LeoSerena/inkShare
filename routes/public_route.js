@@ -80,6 +80,7 @@ public_route.post('/register', async function(req, res){
 
 //post of the login
 public_route.post('/login', async function(req, res){
+    console.log(req.body)
     const { error } = userLoginSchema.validate(req.body)
     if(error){
         res.status(400).send(error.details[0].message)
