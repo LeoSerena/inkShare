@@ -138,7 +138,7 @@ private_route.post('/deleteBook', function(req, res){
 
 private_route.post('/modifyBook', function(req, res){
             // THIS NEEDS TO BE VALIDATED -- TODO
-    let result = Book.findOneAndUpdate(
+    let result = Book.updateOne(
         { '_id' : req.body['book_id']}, 
         { '$set' : {
             'title' : req.body['title'],
