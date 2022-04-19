@@ -48,6 +48,7 @@ public_route.get('/login', function(req, res){
 //post of registeration
 public_route.post('/register', async function(req, res){
 
+    //TODO: perform this in a single query and with a callback
     const emailExists = await User.findOne({email : req.body.email})
     if(emailExists) return res.status(400).send('An account with the given email already exists')
     const userNameExists = await User.findOne({username : req.body.username})
@@ -80,28 +81,28 @@ public_route.post('/register', async function(req, res){
 
 //post of the login
 public_route.post('/login', async function(req, res){
-    console.log(req.body)
     const { error } = userLoginSchema.validate(req.body)
     if(error){
         res.status(400).send(error.details[0].message)
     }else{
-        const user = await User.findOne({
+        User.findOne({
             //can either give username or email
             $or: [
                 { email : req.body.credentials },
                 { username : req.body.credentials }
             ]
+        }, function(err, user){
+            if(!user) return res.status(400).send(err)
+            console.log(user)
+            bcrypt.compare(req.body.password, user.password, (err, result) => {
+                if(err){
+                    return res.status(400).send(err)
+                }else{
+                    const token = jwt.sign({_id: user._id, username : user.username, ait : Date.now()}, process.env.TOKEN_SECRET, {expiresIn : '30m'})
+                    res.cookie('auth-token', token, {maxAge : 1800000}).redirect('/homepage')
+                }
+            })
         })
-        if(!user) return res.status(400).send('username or password incorrect')
-    
-        const isValid = await bcrypt.compare(req.body.password, user.password)
-
-        if(!isValid){
-            return res.status(400).send('username or password incorrect')
-        }else{
-            const token = jwt.sign({_id: user._id, username : user.username, ait : Date.now()}, process.env.TOKEN_SECRET, {expiresIn : '30m'})
-            res.cookie('auth-token', token, {maxAge : 1800000}).redirect('/private/myPage')
-        }
     }
 
 })

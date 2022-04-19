@@ -145,44 +145,15 @@ class Table extends React.Component {
     }
 }
 
-class Clock extends React.Component {
-
-    constructor(props){
-        super(props)
-        this.state = {date : new Date()}
-    }
-
-    componentDidMount(){
-        this.timer = setInterval( () => this.tick(), 1000)
-    }
-
-    componentWillUnmount(){
-        clearInterval(this.timer)
-    }
-
-    tick() {
-        this.setState({
-            date : new Date()
-        })
-    }
-
-    render(){
-        return (<div>It is {this.state.date.toLocaleTimeString()}</div>)
-    }
-}
-
 
 const domContainer = document.querySelector('#root');
 const root = ReactDOM.createRoot(domContainer);
-
-let clock = <Clock/>
 
 let table = <Table/>
 
 let loginForm = <LoginForm/>
 
 let container = <div>
-    {clock}
     {table}
     {loginForm}
 </div>

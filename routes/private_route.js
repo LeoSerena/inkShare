@@ -13,7 +13,8 @@ private_route.use(authenticate)
 
 //display the private page of the user
 private_route.get('/myPage', function(req, res){
-    // an easy solution (maybe bad) was to refresh the token when accessing the private page
+    // an easy solution (maybe bad) was to refresh the token when accessing the private page. This should actually be done in
+    // a middleware and at a higher level
     const token = jwt.sign({_id: req.userId, username : req.username, ait : Date.now()}, process.env.TOKEN_SECRET, {expiresIn : '30m'})
     res.cookie('auth-token', token, {maxAge : 1800000}).render('privatePage', {username : req.username, myPage : true})
 })
