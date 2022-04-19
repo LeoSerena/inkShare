@@ -28,10 +28,6 @@ public_route.get('/charte', function(req, res){
     })
 })
 
-public_route.get('/testing', function(req, res){
-    res.render('test', {username : req.username})
-})
-
 //get the contacts
 public_route.get('/contacts', authenticate, function(req, res){
     res.render('contacts', {username : req.username, contact_page : true})
@@ -93,7 +89,6 @@ public_route.post('/login', async function(req, res){
             ]
         }, function(err, user){
             if(!user) return res.status(400).send(err)
-            console.log(user)
             bcrypt.compare(req.body.password, user.password, (err, result) => {
                 if(err){
                     return res.status(400).send(err)

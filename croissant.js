@@ -6,6 +6,8 @@ var upload = multer();
 var cookieParser = require('cookie-parser')
 var connect = require('./config/mongoDB')
 
+var test_route = require('./routes/test_route')
+
 var public_route = require('./routes/public_route');
 var private_route = require('./routes/private_route');
 
@@ -30,7 +32,8 @@ app.use(upload.array());
 app.use(cookieParser());
 
 app.use('/', public_route);
-app.use('/private', private_route)
+app.use('/private', private_route);
+app.use('/testing', test_route);
 app.get('/*', function(req, res){
     res.render('404')
 })

@@ -21,6 +21,7 @@ const listSchema = new Schema({
     original_creator : {
         type : ObjectID,
         required : true,
+        ref : 'User'
     },
     last_modification : {
         type : Date,

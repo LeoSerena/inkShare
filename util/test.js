@@ -107,7 +107,7 @@ class Table extends React.Component {
     componentDidMount(){
         $.ajax({
             type : 'GET',
-            url : '/private/getBooks',
+            url : this.props.url,
             success : (data) => {
                 if(data['length'] == 0){
                     this.setState({
@@ -145,20 +145,37 @@ class Table extends React.Component {
     }
 }
 
+class TablesContainer extends React.Component {
+    constructor(props){
+        super(props)
+
+        this.state = {}
+    }
+
+    render(){
+        return (
+        <div>
+            BOOKS
+            <Table url='getBooks'/>
+            
+            LISTS
+            <Table url='getListsInfo'/>
+        </div>
+        )
+    }
+}
+
 
 const domContainer = document.querySelector('#root');
 const root = ReactDOM.createRoot(domContainer);
 
-let table = <Table/>
+let tableContainer = <TablesContainer/>
 
 let loginForm = <LoginForm/>
 
 let container = <div>
-    {table}
+    {tableContainer}
     {loginForm}
 </div>
-
-
-
 
 root.render(container)

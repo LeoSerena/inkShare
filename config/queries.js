@@ -1,13 +1,15 @@
 const User = require('../models/User');
 const Book = require('../models/Book');
+const List = require('../models/List')
 
 
 /**
  * Fetches the lists, firends and books for the given user
  * to be displayed on the private page
- * @param {The user id to fetch the information for} user_id 
+ * @param {The user id to fetch the information for} user_id
+ * @param {The callback function that does something with the result} callback
  */
-var getUserById = async function(user_id){
+var getUserById = function(user_id, callback){
     User.findOne(
         { userId : user_id },
         'username email friend_list my_lists fav_lists' //picture
@@ -20,7 +22,7 @@ var getUserById = async function(user_id){
                 {sort : {author : 1}},
                 (err, books) => {
                     if(err){console.log(err)}
-                    res.send({
+                    callback({
                         user : user,
                         books : books
                     })
@@ -30,29 +32,34 @@ var getUserById = async function(user_id){
     )
 }
 
-var getBooksFromUser = async function(user_id){
+var getBooksFromUser = function(user_id, callback){
     Book.find(
         { userId : user_id},
         'title author release_year creation_date _id',
         {sort : {author : 1}},
         (err, books) => {
             if(err){console.log(err)}
-            return books
+            callback(books)
         }
     )
 }
 
-var getlistsFromUser = async function(user_id){
-    User.findOne(
-        { userId : user_id },
-        'my_lists fav_lists'
-    ).populate('friend_list my_lists').exec(
+var getListInfoFromUser = async function(user_id, callback){
+    List.find(
+        { original_creator : user_id },
+        'creation_date last_modification name size',
+        {sort : {last_modification : 1}},
         (err, lists) => {
             if(err){console.log(err)}
-            return lists
+            callback(lists)
         }
     )
 }
 
+module.exports = {
+    getUserById : getUserById,
+    getBooksFromUser : getBooksFromUser,
+    getListInfoFromUser : getListInfoFromUser
+}
 
 
