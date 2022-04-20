@@ -9,7 +9,7 @@ const List = require('../models/List')
  * @param {The user id to fetch the information for} user_id
  * @param {The callback function that does something with the result} callback
  */
-var getUserById = function(user_id, callback){
+const getUserById = function(user_id, callback){
     User.findOne(
         { userId : user_id },
         'username email friend_list my_lists fav_lists' //picture
@@ -21,8 +21,8 @@ var getUserById = function(user_id, callback){
                 'title author release_year creation_date _id',
                 {sort : {author : 1}},
                 (err, books) => {
-                    if(err){console.log(err)}
-                    callback({
+                    if(err){callback(1, err)}
+                    callback(0, {
                         user : user,
                         books : books
                     })
@@ -32,17 +32,68 @@ var getUserById = function(user_id, callback){
     )
 }
 
-var getBooksFromUser = function(user_id, callback){
+// -------------- BOOKS -------------------
+
+const getBooksFromUser = function(user_id, callback){
     Book.find(
         { userId : user_id},
         'title author release_year creation_date _id',
         {sort : {author : 1}},
         (err, books) => {
-            if(err){console.log(err)}
-            callback(books)
+            if(err){callback(1, err)}
+            else{callback(0, books)}
         }
     )
 }
+
+const addBookFromUser = async function(data, callback){
+    const { error } = await bookAddValidation.validate(data)
+    if(error){console.log(error.details[0].message)}
+    else{
+        const book = new Book({
+            'userId' : data.userId,
+            'title' : data.body.title,
+            'author' : data.body.author,
+            'release_year' : data.body.release_year
+        })
+        book.save((err) => {
+            if(err){callback(1, err)}
+            else{callback(0, 'Book saved successfully')}
+        })
+    }
+}
+
+const delBookFromUser = function(book_id, callback){
+    Book.deleteOne(
+        { 'id_' : book_id},
+        (err) => {
+            if(err){callback(1, err)}
+            else{callback(0, 'Book deleted successfully')}
+        }
+    )
+}
+
+const modifBookFromUser = async function(data, callback){
+    const { error } = await bookAddValidation.validate(data)
+    if(error){console.log(error.details[0].message)}
+    Book.updateOne(
+        {'id_' : data.book_id},
+        {'$set' : {
+            'title' : data.body['title'],
+            'author' : data.body['author'],
+            'release_year' : data.body['release_year'],
+            'notes' : data.body['notes'],
+            'last_modif' : Date.now()
+        }},
+        (err) => {
+            if(err){callback(1, err)}
+            else{callback(0, 'Book modified successfully')}
+        }
+    )
+}
+
+// -------------- LISTS -------------------
+
 
 var getListInfoFromUser = async function(user_id, callback){
     List.find(
@@ -57,9 +108,18 @@ var getListInfoFromUser = async function(user_id, callback){
 }
 
 module.exports = {
-    getUserById : getUserById,
-    getBooksFromUser : getBooksFromUser,
-    getListInfoFromUser : getListInfoFromUser
+    users : {
+        getUserById : getUserById
+    },
+    books : {
+        getBooksFromUser : getBooksFromUser,
+        addBookFromUSer : addBookFromUser,
+        delBookFromUser : delBookFromUser,
+        modifBookFromUser : modifBookFromUser
+    },
+    lists : {
+        getListInfoFromUser : getListInfoFromUser
+    }
 }
 
 

@@ -81,13 +81,10 @@ class Row extends React.Component {
 
     render(){
         if(this.props.isheader){
-            return <tr>{this.props.list.map(e => 
-                <th onClick={(() => this.props.sortFunc(e))}>{e}</th>
-            )}</tr>
+            return <tr>{this.props.list.map(e =><th onClick={() => this.props.sortFunc(e)}>{e}</th>)}<th>DEL</th></tr>
         } else{
-            return <tr>{this.props.list.map(elem => <td>{elem}</td>)}</tr>
+            return <tr>{this.props.list.map(elem => <td>{elem}</td>)}<td onClick={() => this.props.delFunc('nin')}>DEL</td></tr>
         }
-
     }
 }
 
@@ -95,19 +92,19 @@ class Table extends React.Component {
 
     constructor(props){
         super(props)
-
         this.state = {
             list : [],
             headers : []
         }
 
         this.handleSortClick = this.handleSortClick.bind(this)
+        this.handleDelClick = this.handleDelClick.bind(this)
     }
 
     componentDidMount(){
         $.ajax({
             type : 'GET',
-            url : this.props.url,
+            url : this.props.get,
             success : (data) => {
                 if(data['length'] == 0){
                     this.setState({
@@ -135,12 +132,22 @@ class Table extends React.Component {
         this.setState({ list : this.state.list.sort((x,y) => x[byValue] > y[byValue] ? 1 : -1) }) 
     }
 
+    handleAddClick(){}
+
+    handleDelClick(id_){
+
+    }
+
+    handleModifClick(id_){}
+
     render(){
         return (<table>
-            <Row list={this.state.headers} isheader={true} sortFunc={this.handleSortClick}/>
-            {this.state.list.map(
-                row => <Row list={this.state.headers.map(h => row[h])} isheader={false} key = {Row.id}/>
-            )}
+            <tbody>
+                <Row list={this.state.headers} isheader={true} sortFunc={this.handleSortClick} key = 'header'/>
+                {this.state.list.map(
+                    elem => <Row list={this.state.headers.map(h => elem[h])} isheader={false} delFunc={this.handleDelClick} key={elem._id}/>
+                )}
+            </tbody>
         </table>)
     }
 }
@@ -148,7 +155,6 @@ class Table extends React.Component {
 class TablesContainer extends React.Component {
     constructor(props){
         super(props)
-
         this.state = {}
     }
 
@@ -156,10 +162,10 @@ class TablesContainer extends React.Component {
         return (
         <div>
             BOOKS
-            <Table url='getBooks'/>
+            <Table get='getBooks' add='addBook' del='delBook' modif='modifBook' key='books'/>
             
             LISTS
-            <Table url='getListsInfo'/>
+            {/* <Table get='getListsInfo' add='addList' del='delList' modif='modifList' key = 'lists'/> */}
         </div>
         )
     }
@@ -171,11 +177,9 @@ const root = ReactDOM.createRoot(domContainer);
 
 let tableContainer = <TablesContainer/>
 
-let loginForm = <LoginForm/>
 
 let container = <div>
     {tableContainer}
-    {loginForm}
 </div>
 
 root.render(container)
