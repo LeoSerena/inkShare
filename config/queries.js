@@ -2,7 +2,6 @@ const User = require('../models/User');
 const Book = require('../models/Book');
 const List = require('../models/List')
 
-
 /**
  * Fetches the lists, firends and books for the given user
  * to be displayed on the private page
@@ -47,28 +46,25 @@ const getBooksFromUser = function(user_id, callback){
 }
 
 const addBookFromUser = async function(data, callback){
-    const { error } = await bookAddValidation.validate(data)
-    if(error){console.log(error.details[0].message)}
-    else{
-        const book = new Book({
-            'userId' : data.userId,
-            'title' : data.body.title,
-            'author' : data.body.author,
-            'release_year' : data.body.release_year
-        })
-        book.save((err) => {
-            if(err){callback(1, err)}
-            else{callback(0, 'Book saved successfully')}
-        })
-    }
+    const book = new Book({
+        'userId' : data.userId,
+        'title' : data.body.title,
+        'author' : data.body.author,
+        'release_year' : data.body.release_year,
+        'notes' : data.body.notes
+    })
+    book.save((err) => {
+        if(err){callback(1, err)}
+        else{callback(0, 'success')}
+    })
 }
 
 const delBookFromUser = function(book_id, callback){
     Book.deleteOne(
-        { 'id_' : book_id},
+        { '_id' : book_id},
         (err) => {
             if(err){callback(1, err)}
-            else{callback(0, 'Book deleted successfully')}
+            else{callback(0, 'success')}
         }
     )
 }
@@ -87,7 +83,7 @@ const modifBookFromUser = async function(data, callback){
         }},
         (err) => {
             if(err){callback(1, err)}
-            else{callback(0, 'Book modified successfully')}
+            else{callback(0, 'success')}
         }
     )
 }

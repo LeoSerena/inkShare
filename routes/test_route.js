@@ -1,8 +1,12 @@
 var express = require('express');
 var test_route = express.Router();
+
 var authenticate = require('../middlewares/token_auth')
+var bookAddValidation = require('../middlewares/validations').bookAddValidation
 
 const queries = require('../config/queries')
+
+
 
 // TODO: authenticate for the whole route 
 
@@ -25,16 +29,21 @@ test_route.get('/getBooks', authenticate, function(req, res){
 })
 
 
-test_route.post('/addBook', authenticate, function(req,res){
-    queries.books.addBookFromUSer(req.body.bookId, (failure, result) => {
-        if(failure){
-            console.log(result)
-            res.send(result)
-        }else{res.send(result)}
-    })
+test_route.post('/addBook', authenticate, async function(req,res){
+    const { error } = await bookAddValidation.validate(req.body.book)
+    if(error){console.log(error.details[0].message)}
+    else{
+        queries.books.addBookFromUSer(req, (failure, result) => {
+            if(failure){
+                console.log(result)
+                res.send(result)
+            }else{res.send(result)}
+        })
+    }
 })
 
 test_route.post('/delBook', authenticate, function(req, res){
+    console.log(req.body.bookId)
     queries.books.delBookFromUser(req.body.bookId, (failure, result) => {
         if(failure){
             console.log(result)
