@@ -3,11 +3,9 @@
 const domContainer = document.querySelector('#root');
 const root = ReactDOM.createRoot(domContainer);
 
-let tableContainer = <TablesContainer/>
+let page = <div>
+    <UserComponent/>
+    <TablesContainer/>
+    </div>
 
-
-let container = <div>
-    {tableContainer}
-</div>
-
-root.render(container)
+root.render(page)

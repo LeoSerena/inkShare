@@ -8,7 +8,7 @@ class Input extends React.Component {
     render() {
         return (
             <label>
-                {this.props.inputNameDisplay}: 
+                {this.props.inputNameDisplay}:
                 <input type = 'text' name = {this.props.name} value = {this.props.value} onChange = {this.props.handleChange}/>
             </label>
         )
@@ -65,7 +65,7 @@ class LoginForm extends React.Component {
         return (
             <form onSubmit={this.handleSubmit}>
                 {Object.keys(this.state).map( key => (
-                    <Input name = {key} inputNameDisplay = {key} value = {this.state[key]} handleChange = {this.handleChange}/>
+                    <Input withLabel={true} name = {key} inputNameDisplay = {key} value = {this.state[key]} handleChange = {this.handleChange}/>
                 ))}
                 <input type="submit" value="Submit" />
             </form>
@@ -74,7 +74,7 @@ class LoginForm extends React.Component {
 }
 
 
-class AddComponent extends React.Component {
+class AddBookForm extends React.Component {
     constructor(props){
         super(props)
 
@@ -83,8 +83,7 @@ class AddComponent extends React.Component {
             book : {
                 title : 'title',
                 author : 'author',
-                release_year : '0',
-                notes : 'enter notes...'
+                release_year : '0'
             }
         }
 
@@ -116,15 +115,80 @@ class AddComponent extends React.Component {
         }else{
             return (
                 <form onSubmit={this.handleSubmit}>
-                    {Object.keys(this.state.book).map( key => (
-                        key=='notes'
-                            ? <textarea name = {key} inputNameDisplay = {key} value = {this.state.book[key]} onChange = {this.handleChange}/>
-                            : <Input name = {key} inputNameDisplay = {key} value = {this.state.book[key]} handleChange = {this.handleChange}/>
-                    ))}
+                    {Object.keys(this.state.book).map( key => (<Input name = {key} inputNameDisplay = {key} value = {this.state.book[key]} handleChange = {this.handleChange}/>))}
                     <input type="submit" value="Submit" />
                 </form>
             )
         }
+    }
+}
+
+class ModifBookForm extends React.Component {
+    constructor(props){
+        super(props)
+
+        this.state = {
+            title : '',
+            author : '',
+            release_year : '',
+            creation_date : '',
+            last_modif : '',
+            notes : ''
+        }
+
+        this.handleChange = this.handleChange.bind(this)
+        this.handleSubmit = this.handleSubmit.bind(this)
+    }
+
+    componentDidMount(){
+        $.ajax({
+            type : 'GET',
+            url : 'getBook',
+            data : {book_id : this.props.book_id},
+            success : (data) => {
+                let book = data[0]
+                delete book._id
+                book.last_modif = get_day_from_date(book.last_modif)
+                book.creation_date = get_day_from_date(book.creation_date)
+                this.setState(book)
+            },
+            error : (err) => console.log(err)
+        })
+    }
+
+    handleChange(event) {
+        this.setState({[event.target.name] : event.target.value})
+    }
+
+    handleSubmit(e){
+        e.preventDefault()
+        let book = this.state
+        book._id = this.props.book_id
+        console.log(this.state)
+        $.ajax({
+            type : 'POST',
+            url : 'modifBook',
+            data : this.state,
+            success : (data) => {
+                if(data=='success'){
+                    alert('book information updated successfully')
+                    window.location.reload()
+                }
+            }
+        })
+    }
+
+    render(){
+        return (
+            <form onSubmit={this.handleSubmit}>
+                {Object.keys(this.state).map( key => (
+                    (key=='title'||key=='author'||key=='release_year'||key=='notes')
+                        ? <Input key={key} name={key} inputNameDisplay={key} value={this.state[key]} handleChange={this.handleChange}/>
+                        : (<p>{key}:{this.state[key]}</p>)
+                ))}
+                <input type="submit" value="Save" />
+            </form>
+        )
     }
 }
 
@@ -134,9 +198,14 @@ class Row extends React.Component {
     }
 
     render(){
-        if(this.props.isheader){return <tr>{this.props.list.map(e =><th onClick={() => this.props.sortFunc(e)}>{e}</th>)}<th><AddComponent/></th></tr>} 
-        else{return <tr>{this.props.list.map(elem => <td>{elem}</td>)}<td onClick={() => this.props.delFunc(this.props.ID)}>DEL</td></tr>}
-    }
+        if(this.props.isheader){return <tr>
+            {this.props.list.map(e =><th onClick={() => this.props.sortFunc(e)}>{e}</th>)}<th><AddBookForm/></th>
+        </tr>} 
+        else{return (<tr>
+            {this.props.list.map(elem => <td onClick={() => this.props.toggle(this.props.ID)}>{elem}</td>)}
+            <td onClick={() => this.props.delFunc(this.props.ID)}>DEL</td>
+            </tr>
+    )}}
 }
 
 class Table extends React.Component {
@@ -145,13 +214,16 @@ class Table extends React.Component {
         super(props)
         this.state = {
             list : [],
-            headers : []
+            headers : [],
+            book_id : 0,
+            toggle : true
         }
 
         this.loadData = this.loadData.bind(this)
 
         this.handleSortClick = this.handleSortClick.bind(this)
         this.handleDelClick = this.handleDelClick.bind(this)
+        this.handleToggle = this.handleToggle.bind(this)
     }
 
     loadData(){
@@ -196,17 +268,31 @@ class Table extends React.Component {
         })
     }
 
-    handleModifClick(id_){}
+    handleToggle(ID){
+        this.setState({
+            toggle : false,
+            book_id : ID
+        })
+    }
 
     render(){
-        return (<table>
-            <tbody>
-                <Row list={this.state.headers} isheader={true} sortFunc={this.handleSortClick} key='header'/>
-                {this.state.list.map(
-                    elem => <Row list={this.state.headers.map(h => elem[h])} isheader={false} delFunc={this.handleDelClick} key={elem._id} ID={elem._id}/>
-                )}
-            </tbody>
-        </table>)
+        if(this.state.toggle){
+            return (<table>
+                <tbody>
+                    <Row list={this.state.headers} isheader={true} sortFunc={this.handleSortClick} key='header'/>
+                    {this.state.list.map(
+                        elem => <Row 
+                        toggle={this.handleToggle}
+                        list={this.state.headers.map(h => elem[h])}
+                        isheader={false} delFunc={this.handleDelClick}
+                        key={elem._id}
+                        ID={elem._id}/>
+                    )}
+                </tbody>
+            </table>)
+        }else{
+            return <ModifBookForm book_id={this.state.book_id}/>
+        }
     }
 }
 

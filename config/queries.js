@@ -2,6 +2,8 @@ const User = require('../models/User');
 const Book = require('../models/Book');
 const List = require('../models/List')
 
+//POPULATE : https://mongoosejs.com/docs/populate.html#query-conditions
+
 /**
  * Fetches the lists, firends and books for the given user
  * to be displayed on the private page
@@ -10,25 +12,45 @@ const List = require('../models/List')
  */
 const getUserById = function(user_id, callback){
     User.findOne(
-        { userId : user_id },
-        'username email friend_list my_lists fav_lists' //picture
-    ).populate('friend_list my_lists').exec(
+        { _id : user_id },
+        'username email friend_list' //picture
+    ).populate({
+        path : 'friend_list',
+        select : 'username'
+    }).exec(
         (err, user) => {
-            if(err){console.log(err)}
-            Book.find(
-                { userId : user_id},
-                'title author release_year creation_date _id',
-                {sort : {author : 1}},
-                (err, books) => {
-                    if(err){callback(1, err)}
-                    callback(0, {
-                        user : user,
-                        books : books
-                    })
-                }
-            )
+            if(err||(user_id!=user._id)){callback(1, err)}
+            else{callback(0, user)}
         }
     )
+}
+
+const addFriend = function(user_id, friend_credential, callback){
+    User.findOne(
+        {$or : [
+            { username : friend_credential},
+            { email : friend_credential}
+        ]},
+        '_id username email'
+    ).exec((err, friend) => {
+        console.log(friend)
+        if(err||(friend.username!=friend_credential && friend.email!=friend_credential)){
+            callback(1, err)
+        }else{
+            if(friend._id && (friend._id != user_id)){
+                User.findOneAndUpdate(
+                    {_id : user_id},
+                    { $push : {friend_list : friend._id}}
+                ).exec((err) => {
+                    if(err){callback(1, err)}
+                    else{callback(0, 'success')}
+                })
+            }else{
+                callback(1, 'The given username or email was not found')
+            }
+        }
+    })
+
 }
 
 // -------------- BOOKS -------------------
@@ -36,7 +58,7 @@ const getUserById = function(user_id, callback){
 const getBooksFromUser = function(user_id, callback){
     Book.find(
         { userId : user_id},
-        'title author release_year creation_date _id',
+        'title author release_year _id',
         {sort : {author : 1}},
         (err, books) => {
             if(err){callback(1, err)}
@@ -45,13 +67,23 @@ const getBooksFromUser = function(user_id, callback){
     )
 }
 
-const addBookFromUser = async function(data, callback){
+const getBookFromUser = function(book_id, callback){
+    Book.find(
+        { _id : book_id},
+        'title author release_year creation_date last_modif notes',
+        (err, book) => {
+            if(err){callback(1, err)}
+            else{callback(0, book)}
+        }
+    )
+}
+
+const addBookFromUser = function(data, callback){
     const book = new Book({
         'userId' : data.userId,
         'title' : data.body.title,
         'author' : data.body.author,
-        'release_year' : data.body.release_year,
-        'notes' : data.body.notes
+        'release_year' : data.body.release_year
     })
     book.save((err) => {
         if(err){callback(1, err)}
@@ -69,16 +101,14 @@ const delBookFromUser = function(book_id, callback){
     )
 }
 
-const modifBookFromUser = async function(data, callback){
-    const { error } = await bookAddValidation.validate(data)
-    if(error){console.log(error.details[0].message)}
+const modifBookFromUser = function(book, book_id, callback){
     Book.updateOne(
-        {'id_' : data.book_id},
+        {'_id' : book_id},
         {'$set' : {
-            'title' : data.body['title'],
-            'author' : data.body['author'],
-            'release_year' : data.body['release_year'],
-            'notes' : data.body['notes'],
+            'title' : book['title'],
+            'author' : book['author'],
+            'release_year' : book['release_year'],
+            'notes' : book['notes'],
             'last_modif' : Date.now()
         }},
         (err) => {
@@ -105,9 +135,11 @@ var getListInfoFromUser = async function(user_id, callback){
 
 module.exports = {
     users : {
-        getUserById : getUserById
+        getUserById : getUserById,
+        addFriend : addFriend
     },
     books : {
+        getBookFromUser : getBookFromUser,
         getBooksFromUser : getBooksFromUser,
         addBookFromUSer : addBookFromUser,
         delBookFromUser : delBookFromUser,

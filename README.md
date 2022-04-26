@@ -23,6 +23,7 @@
     - similar lists
     - similar users
 - stats over the lists training
+- trending topics on main page
 
 ### Lists
 
@@ -76,3 +77,7 @@
 ### 19/4/22
 
 - modified some callbacks and DB connect now returns an error when fails
+
+### 25/4/22
+
+- added adding, modif and deletion of books with react

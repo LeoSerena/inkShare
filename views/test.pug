@@ -1,7 +1,7 @@
 doctype html
 html
     head
-        title = 'testing page'
+        title testing page
         link(rel = 'stylesheet' href = '/css/test.css')
         script(src="https://unpkg.com/babel-standalone@6/babel.min.js")
         script(src = '/util/jquery.js')
@@ -12,5 +12,7 @@ html
         script(src="https://unpkg.com/react@18/umd/react.development.js" crossorigin)
         script(src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin)
         
+        script(src="../util/others.js")
         script(type='text/babel' src="../util/compSource.js")
+        script(type='text/babel' src="../util/userFunc.js")
         script(type='text/babel' src="../util/test.js")

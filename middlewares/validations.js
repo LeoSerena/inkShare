@@ -44,7 +44,9 @@ const bookSchema = Joi.object({
     release_year : Joi.number()
         .integer()
         .max(9999)
-        .min(0)
+        .min(0),
+    notes : Joi.string()
+        .max(9999)
 })
 
 const listSchema = Joi.object({
