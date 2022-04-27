@@ -30,7 +30,7 @@ class UserComponent extends React.Component {
             data : {friend_credential : this.state.friend},
             sucess : (result) => {
                 if(result=='success'){
-                    alert('friend added successfully')
+                    alert('friend request sent')
                     window.location.reload()
                 }else{
                     alert(result)

@@ -19,8 +19,10 @@ const userSchema = new mongoose.Schema({
         default: Date.now
     },
     friend_list : [{type : Schema.Types.ObjectId, ref : 'User'}],
-    my_lists : [{type : Schema.Types.ObjectId, ref : 'List'}],
-    fav_lists : [{type : Schema.Types.ObjectId, ref : 'List'}]
+    friend_request_pending : [{type : Schema.Types.ObjectId, ref : 'User'}],
+    friend_request_sent : [{type : Schema.Types.ObjectId, ref : 'User'}],
+    lists_owned : [{type : Schema.Types.ObjectId, ref : 'List'}],
+    lists_followed : [{type : Schema.Types.ObjectId, ref : 'List'}]
 })
 
 module.exports = mongoose.model('User', userSchema)

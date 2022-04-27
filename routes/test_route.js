@@ -4,7 +4,7 @@ var test_route = express.Router();
 var authenticate = require('../middlewares/token_auth')
 var bookAddValidation = require('../middlewares/validations').bookAddValidation
 
-const queries = require('../config/queries')
+const queries = require('../config/query_files/queries')
 
 
 
