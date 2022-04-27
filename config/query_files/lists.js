@@ -11,3 +11,7 @@ var getListInfoFromUser = async function(user_id, callback){
         }
     )
 }
+
+module.exports = {
+    getListInfoFromUser : getListInfoFromUser
+}

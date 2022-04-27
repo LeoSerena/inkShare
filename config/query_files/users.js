@@ -9,9 +9,15 @@ const User = require('../../models/User');
  const getUserById = function(user_id, callback){
     User.findOne(
         { _id : user_id },
-        'username email friend_list' //picture
+        'username email friend_list friend_request_sent friend_request_pending' //picture
     ).populate({
         path : 'friend_list',
+        select : 'username'
+    }).populate({
+        path : 'friend_request_sent',
+        select : 'username'
+    }).populate({
+        path : 'friend_request_pending',
         select : 'username'
     }).exec(
         (err, user) => {
@@ -21,36 +27,6 @@ const User = require('../../models/User');
     )
 }
 
-const addFriend = function(user_id, friend_credential, callback){
-    User.findOne(
-        {$or : [
-            { username : friend_credential},
-            { email : friend_credential}
-        ]},
-        '_id username email'
-    ).exec((err, friend) => {
-        console.log(friend)
-        if(err||(friend.username!=friend_credential && friend.email!=friend_credential)){
-            callback(1, err)
-        }else{
-            if(friend._id && (friend._id != user_id)){
-                User.findOneAndUpdate(
-                    {_id : user_id},
-                    { $push : {friend_list : friend._id}}
-                ).exec((err) => {
-                    if(err){callback(1, err)}
-                    else{callback(0, 'success')}
-                })
-            }else{
-                callback(1, 'The given username or email was not found')
-            }
-        }
-    })
-
-}
-
-
 module.exports = {
-    getUserById : getUserById,
-    addFriend : addFriend
+    getUserById : getUserById
 }
