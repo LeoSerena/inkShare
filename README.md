@@ -80,4 +80,8 @@
 
 ### 25/4/22
 
-- added adding, modif and deletion of books with react
+- implemented adding, modif and deletion of books with react
+
+### 27/4/22
+
+- implemented friends adding and deletion

@@ -14,7 +14,7 @@ const discussionSchema = new Schema({
     last_modif : {
         type: Date
     },
-    tags : [{type : String}] ,
+    tags : [{type : String}],
     owner : {
         type : Schema.Types.ObjectId,
         ref : 'User',
@@ -24,7 +24,20 @@ const discussionSchema = new Schema({
         type : Schema.Types.ObjectId, 
         ref : 'User'
     }],
-    comments : [{type : String}]
+    messages : [{type : Schema.Types.ObjectId, ref : 'Message'}],
+    language : {
+        type : 'String',
+        default : 'english'
+    }
 })
+
+// Creates a text type B+tree index on the title and the tags
+discussionSchema.index( 
+    { title : 'text', tags : 'text' },
+    { 
+        default_language : 'english',
+        language_overrride : 'language'
+    }
+)
 
 module.exports = mongoose.model('Discussion', discussionSchema)

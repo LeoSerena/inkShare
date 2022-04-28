@@ -15,7 +15,8 @@ var connect = async function(){
         {
             useNewUrlParser : true,
             useUnifiedTopology: true,
-            //useFindAndModify : false
+            //useFindAndModify : false,
+            //autoIndex : false -> when in production
         }
     ).then(
         () => console.log('connected to mongoDB'),
