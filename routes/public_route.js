@@ -1,17 +1,21 @@
 var express = require('express');
-var public_route = express.Router();
-var authenticate = require('../middlewares/token_auth')
-var fs = require('fs')
-var User = require('../models/User')
-var userRegisterationSchema = require('../middlewares/validations').userRegisterationValidation
-var userLoginSchema = require('../middlewares/validations').userLoginValidation
 var bcrypt = require('bcryptjs')
 var jwt = require('jsonwebtoken');
+var fs = require('fs')
 
+var public_route = express.Router();
+
+var authenticate = require('../middlewares/token_auth')
+var userRegisterationSchema = require('../middlewares/validations').userRegisterationValidation
+var userLoginSchema = require('../middlewares/validations').userLoginValidation
+var User = require('../models/User')
+const queries = require('../config/query_files/queries')
+callback = queries.callback
 
 //get the main page
 public_route.get('/homepage', authenticate, async function(req, res){
     const username = req.username
+    // The following should be done with a middleware
     res.render('homepage', {username : username, homepage : true})
 })
 
@@ -28,22 +32,13 @@ public_route.get('/charte', function(req, res){
     })
 })
 
-//get the contacts
-public_route.get('/contacts', authenticate, function(req, res){
-    res.render('contacts', {username : req.username, contact_page : true})
-})
 //get register file
 public_route.get('/register', function(req, res){
-    res.render('registerForm', {register_page : true})
-})
-//get login file
-public_route.get('/login', function(req, res){
-    res.render('loginForm', {login_page : true})
+    res.render('registerPage', {register_page : true})
 })
 
 //post of registeration
 public_route.post('/register', async function(req, res){
-
     //TODO: perform this in a single query and with a callback
     const emailExists = await User.findOne({email : req.body.email})
     if(emailExists) return res.status(400).send('An account with the given email already exists')
@@ -66,7 +61,7 @@ public_route.post('/register', async function(req, res){
         })
         try{
             var savedUser = await user.save()
-            res.render('registSuccessful')
+            res.send('success')
         }catch(err){
             res.status(400).send(err)
         }
@@ -93,8 +88,12 @@ public_route.post('/login', async function(req, res){
                 if(err){
                     return res.status(400).send(err)
                 }else{
-                    const token = jwt.sign({_id: user._id, username : user.username, ait : Date.now()}, process.env.TOKEN_SECRET, {expiresIn : '30m'})
-                    res.cookie('auth-token', token, {maxAge : 1800000}).redirect('/homepage')
+                    const token = jwt.sign(
+                        {_id: user._id, username : user.username, ait : Date.now()}, 
+                        process.env.TOKEN_SECRET, 
+                        {expiresIn : '30m'}
+                    )
+                    res.cookie('auth-token', token, {maxAge : 1800000}).send('success')
                 }
             })
         })
@@ -104,7 +103,24 @@ public_route.post('/login', async function(req, res){
 
 //get the logout
 public_route.get('/logout', function(req, res){
-    res.clearCookie('auth-token').redirect('/homepage')
+    res.clearCookie('auth-token').send('success')
 });
+
+
+// ----------------- USER -------------------
+public_route.get('/getUser', authenticate, function(req, res){
+    queries.users.getUserById(req.userId, (fail, result) => callback(fail, result, res))
+})
+
+// ----------------- FRIENDS -----------------
+public_route.post('/addFriend', authenticate, function(req, res){
+    queries.friends.friendRequest(req.userId, req.body.friend_credential, (fail, result) => callback(fail, result, res))
+})
+public_route.post('/respondFriend', authenticate, function(req, res){
+    queries.friends.friendRespond(req.userId, req.body.friend_id, req.body.response, (fail, result) => callback(fail, result, res))
+})
+public_route.post('/removeFriend', authenticate, function(req, res){
+    queries.friends.friendDelete(req.userId, req.body.friend_id, (fail, result) => callback(fail, result, res))
+})
 
 module.exports = public_route;
