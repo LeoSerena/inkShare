@@ -20,4 +20,29 @@ const authenticate = function(req, res, next){
     }
 }
 
-module.exports = authenticate;
+const refresh = function(req, res, next){
+    if(req.cookies['refresh-token']){
+        const refresh_token = req.cookies['refresh-token']
+        jwt.verify(
+            refresh_token, process.env.REFRESH_TOKEN_SECRET,
+            (err, decoded) => {
+                if(err){return res.status(400).send('Unauthorized')}
+                const access_token = jwt.sign({
+                        _id : req.userId,
+                        username : req.username,
+                        ait : Date.now()
+                    },
+                    process.env.TOKEN_SECRET, 
+                    { expiresIn : '20m' }
+                )
+                res.cookie('auth-token', access_token, {maxAge : 20 * 60 * 1000})
+            }
+        )
+    }
+    next()
+}
+
+module.exports = {
+    authenticate : authenticate,
+    refresh : refresh
+};

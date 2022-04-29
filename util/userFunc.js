@@ -125,7 +125,7 @@ class UserComponent extends React.Component {
 
     render(){
         return (<div>
-            <p>{this.state.user.username}</p>
+            <p onClick={redirectUserPage}>{this.state.user.username}</p>
             <p>{this.state.user.email}</p>
             <div>
                 friends:
@@ -144,7 +144,7 @@ class UserComponent extends React.Component {
                 <Friend user_id={this.state._id} friend_username={element.username} friend_id={element._id} type='request'/>)}
             </div>
             <form onSubmit={this.handleFriendRequestSubmit}>
-                <Input withLabel={true} name='friend' inputNameDisplay = 'add friend:' value={this.state.value} handleChange={this.handleChange}/>
+                <Input withLabel={true} name='friend' inputNameDisplay = 'add friend' value={this.state.value} handleChange={this.handleChange}/>
                 <input type="submit" value="add" />
             </form>
             <div>

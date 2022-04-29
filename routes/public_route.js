@@ -5,19 +5,18 @@ var fs = require('fs')
 
 var public_route = express.Router();
 
-var authenticate = require('../middlewares/token_auth')
-var userRegisterationSchema = require('../middlewares/validations').userRegisterationValidation
-var userLoginSchema = require('../middlewares/validations').userLoginValidation
-var User = require('../models/User')
+const token = require('../middlewares/token_auth')
+const userRegisterationSchema = require('../middlewares/validations').userRegisterationValidation
+const userLoginSchema = require('../middlewares/validations').userLoginValidation
+const User = require('../models/User')
 const queries = require('../config/query_files/queries')
+const bookAddValidation = require('../middlewares/validations').bookAddValidation
 callback = queries.callback
 
-//get the main page
-public_route.get('/homepage', authenticate, async function(req, res){
-    const username = req.username
-    // The following should be done with a middleware
-    res.render('homepage', {username : username, homepage : true})
-})
+public_route.use(token.authenticate)
+
+public_route.get('/homepage', function(req, res){res.render('homepage', {username : req.username})})
+public_route.get('/userPage', function(req, res){res.render('userPage', {username : req.username})})
 
 //get the pdf view of the club rules
 public_route.get('/charte', function(req, res){
@@ -32,7 +31,6 @@ public_route.get('/charte', function(req, res){
     })
 })
 
-//get register file
 public_route.get('/register', function(req, res){
     res.render('registerPage', {register_page : true})
 })
@@ -83,17 +81,27 @@ public_route.post('/login', async function(req, res){
                 { username : req.body.credentials }
             ]
         }, function(err, user){
-            if(!user) return res.status(400).send(err)
+            if(!user) return res.send('user not found')
             bcrypt.compare(req.body.password, user.password, (err, result) => {
-                if(err){
-                    return res.status(400).send(err)
+                if(err||!result){
+                    return res.send('incorrect password')
                 }else{
-                    const token = jwt.sign(
+                    const access_token = jwt.sign(
                         {_id: user._id, username : user.username, ait : Date.now()}, 
                         process.env.TOKEN_SECRET, 
-                        {expiresIn : '30m'}
+                        {expiresIn : '20m'}
                     )
-                    res.cookie('auth-token', token, {maxAge : 1800000}).send('success')
+                    const refreshToken = jwt.sign(
+                        {username : user.username},
+                        process.env.REFRESH_TOKEN_SECRET, {expiresIn: '1d'}
+                    )
+                    res.cookie('auth-token', access_token, {maxAge : 20 * 60 * 1000})
+                    res.cookie('refresh-token', refreshToken, { 
+                        httpOnly: true, 
+                        secure: true, 
+                        maxAge: 24 * 60 * 60 * 1000 
+                    })
+                    res.send('success')
                 }
             })
         })
@@ -108,19 +116,84 @@ public_route.get('/logout', function(req, res){
 
 
 // ----------------- USER -------------------
-public_route.get('/getUser', authenticate, function(req, res){
+public_route.get('/getUser', function(req, res){
     queries.users.getUserById(req.userId, (fail, result) => callback(fail, result, res))
 })
 
 // ----------------- FRIENDS -----------------
-public_route.post('/addFriend', authenticate, function(req, res){
+public_route.post('/addFriend', function(req, res){
     queries.friends.friendRequest(req.userId, req.body.friend_credential, (fail, result) => callback(fail, result, res))
 })
-public_route.post('/respondFriend', authenticate, function(req, res){
+public_route.post('/respondFriend', function(req, res){
     queries.friends.friendRespond(req.userId, req.body.friend_id, req.body.response, (fail, result) => callback(fail, result, res))
 })
-public_route.post('/removeFriend', authenticate, function(req, res){
+public_route.post('/removeFriend', function(req, res){
     queries.friends.friendDelete(req.userId, req.body.friend_id, (fail, result) => callback(fail, result, res))
 })
+
+// ----------------- BOOKS -------------------
+
+public_route.get('/getBook', function(req, res){
+    queries.books.getBookFromUser(req.query.book_id, (fail, result) => callback(fail, result, res))
+})
+public_route.get('/getBooks', function(req, res){
+    queries.books.getBooksFromUser(req.userId, (fail, result) => callback(fail, result, res))
+})
+public_route.post('/addBook', async function(req,res){
+    const { error } = await bookAddValidation.validate(req.body.book)
+    if(error){console.log(error.details[0].message)}
+    else{
+        queries.books.addBookFromUSer(req, (fail, result) => callback(fail, result, res))
+    }
+})
+public_route.post('/delBook', function(req, res){
+    queries.books.delBookFromUser(req.body.bookId, (fail, result) => callback(fail, result, res))
+})
+public_route.post('/modifBook', async function(req, res){
+    let book_id = req.body._id
+    delete req.body._id
+    delete req.body.creation_date
+    delete req.body.last_modif
+    const { error } = await bookAddValidation.validate(req.body)
+    if(error){
+        console.log(error.details[0].message)
+        return 'failure'
+    }else{
+        queries.books.modifBookFromUser(req.body, book_id, (fail, result) => callback(fail, result, res))
+    }
+})
+
+// ---------------- DISCUSSIONS ------------------
+
+public_route.get('/getUserDiscussions', function(req, res){
+
+})
+
+public_route.get('/getRecentDiscussions', function(req, res){
+
+})
+
+public_route.post('/addDiscussion', function(req, res){
+    // validate discussion
+    let discussion = {
+        title : 'Soil',
+        tags : ['the', 'very', 'first'],
+    }
+    queries.discussions.createDiscussion(req.userId, discussion, (fail, result) => callback(fail, result, res))
+})
+
+public_route.post('/deleteDiscussion', function(req, res){
+
+})
+
+public_route.get('/searchDiscussion', function(req, res){
+
+})
+
+public_route.post('/message', function(req, res){
+
+})
+
+public_route.use(token.refresh)
 
 module.exports = public_route;

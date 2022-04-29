@@ -6,14 +6,15 @@ const discussionSchema = new Schema({
         type : String,
         require : true
     },
-    references : [{type : Schema.Types.ObjectId, ref : 'Discussion'}],
+    reference : {
+        type : Schema.Types.ObjectId, 
+        ref : 'Discussion'
+    },
     creation_date : {
         type: Date,
         default : Date.now
     },
-    last_modif : {
-        type: Date
-    },
+    last_modif : {type: Date},
     tags : [{type : String}],
     owner : {
         type : Schema.Types.ObjectId,
@@ -38,6 +39,10 @@ discussionSchema.index(
         default_language : 'english',
         language_overrride : 'language'
     }
+)
+
+discussionSchema.index(
+    { creation_date : 'date' }
 )
 
 module.exports = mongoose.model('Discussion', discussionSchema)
