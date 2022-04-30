@@ -35,9 +35,7 @@ class RegisterForm extends React.Component {
                             credentials : this.state.username,
                             password : this.state.password
                         },
-                        success : () => {
-                            window.location.href = '/homepage'
-                        },
+                        success : () => this.props.homepage(),
                         error : (err) => alert(err)
                     })
                 },
@@ -57,13 +55,3 @@ class RegisterForm extends React.Component {
         )
     }
 }
-
-const domContainer = document.querySelector('#root');
-const root = ReactDOM.createRoot(domContainer);
-
-
-let page = <div>
-    <RegisterForm/>
-    </div>
-
-root.render(page)

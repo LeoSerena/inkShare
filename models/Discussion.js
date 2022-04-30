@@ -25,6 +25,10 @@ const discussionSchema = new Schema({
         type : Schema.Types.ObjectId, 
         ref : 'User'
     }],
+    private : {
+        type : Schema.Types.Boolean,
+        default : false
+    },
     messages : [{type : Schema.Types.ObjectId, ref : 'Message'}],
     language : {
         type : 'String',

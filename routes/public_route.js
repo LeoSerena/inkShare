@@ -10,11 +10,12 @@ const userRegisterationSchema = require('../middlewares/validations').userRegist
 const userLoginSchema = require('../middlewares/validations').userLoginValidation
 const User = require('../models/User')
 const queries = require('../config/query_files/queries')
-const bookAddValidation = require('../middlewares/validations').bookAddValidation
-callback = queries.callback
+const bookAddValidation = require('../middlewares/validations').bookAddValidation;
+const { callback } = require('../config/query_files/queries');
 
 public_route.use(token.authenticate)
 
+public_route.get('/main', function(req, res){res.render('main', {username : req.username})})
 public_route.get('/homepage', function(req, res){res.render('homepage', {username : req.username})})
 public_route.get('/userPage', function(req, res){res.render('userPage', {username : req.username})})
 
@@ -170,7 +171,7 @@ public_route.get('/getUserDiscussions', function(req, res){
 })
 
 public_route.get('/getRecentDiscussions', function(req, res){
-
+    queries.discussions.getRecentDiscussions((fail, result) => callback(fail, result, res))
 })
 
 public_route.post('/addDiscussion', function(req, res){

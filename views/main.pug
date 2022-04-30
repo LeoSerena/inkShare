@@ -1,0 +1,21 @@
+doctype html
+html
+    head
+        title testing page
+        link(rel = 'stylesheet' href = '/css/test.css')
+        script(src="https://unpkg.com/babel-standalone@6/babel.min.js")
+        script(src = '/util/jquery.js')
+
+    body
+        div#root(logged=username)
+
+        script(src="https://unpkg.com/react@18/umd/react.development.js" crossorigin)
+        script(src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin)
+        
+        script(src="../util/others.js")
+        script(type='text/babel' src="../util/compSource.js")
+        script(type='text/babel' src="../util/userFunc.js")
+        script(type='text/babel' src="../util/homepage.js")
+        script(type='text/babel' src="../util/userPage.js")
+        script(type='text/babel' src="../util/registerPage.js")
+        script(type='text/babel' src="../util/main.js")

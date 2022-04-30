@@ -72,6 +72,7 @@ class UserComponent extends React.Component {
         }
 
         this.handleChange = this.handleChange.bind(this)
+        this.handleLogout = this.handleLogout.bind(this)
         this.handleFriendRequestSubmit = this.handleFriendRequestSubmit.bind(this)
     }
 
@@ -96,7 +97,7 @@ class UserComponent extends React.Component {
         })
     }
 
-    handleLogOut(e){
+    handleLogout(e){
         e.preventDefault()
         $.ajax({
             type : 'GET',
@@ -104,7 +105,9 @@ class UserComponent extends React.Component {
             success : (data) => {
                 if(data=='success'){
                     alert('sucessfuly logged out')
-                    window.location.href = 'homepage'
+                    this.props.homepage()
+                    // same as login -> need a reload to delete the access token
+                    window.location.reload()
                 }
             },
             error : (err) => console.log(err)
@@ -125,7 +128,7 @@ class UserComponent extends React.Component {
 
     render(){
         return (<div>
-            <p onClick={redirectUserPage}>{this.state.user.username}</p>
+            <p onClick={() => this.props.userPage()}>{this.state.user.username}</p>
             <p>{this.state.user.email}</p>
             <div>
                 friends:
@@ -148,7 +151,7 @@ class UserComponent extends React.Component {
                 <input type="submit" value="add" />
             </form>
             <div>
-                <button onClick={this.handleLogOut}>log out</button>
+                <button onClick={this.handleLogout}>log out</button>
             </div>
         </div>)
     }
@@ -162,7 +165,9 @@ class RightHeader extends React.Component {
     }
 
     render(){
-        return this.state.logged ? <UserComponent/> : <RegisterLogin/>
+        return this.state.logged 
+            ? <UserComponent userPage={this.props.userPage} homepage={this.props.homepage}/> 
+            : <RegisterLogin registerpage={this.props.registerpage}/>
     }
 }
 
@@ -178,7 +183,7 @@ class RegisterLogin extends React.Component {
 
     handleRegister(e){
         e.preventDefault()
-        window.location.href = '/register'
+        this.props.registerpage()
     }
 
     handleLogin(e){
@@ -215,7 +220,6 @@ class LoginForm extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault()
-        let data = this.state
         $.ajax({
             type : 'POST',
             url : '/login',
@@ -223,6 +227,7 @@ class LoginForm extends React.Component {
                 credentials : this.state.credentials,
                 password : this.state.password
             },
+            // Since I need to get the access token, need to reload the page...
             success : () => window.location.reload(),
             error : (err) => alert(err)
         })
@@ -232,7 +237,7 @@ class LoginForm extends React.Component {
         return (
             <form onSubmit={this.handleSubmit}>
                 {Object.keys(this.state).map( key => (
-                    <Input withLabel={true} name = {key} inputNameDisplay = {key} value = {this.state[key]} handleChange = {this.handleChange}/>
+                    <Input withLabel={true} key={key} name={key} inputNameDisplay={key} value={this.state[key]} handleChange={this.handleChange}/>
                 ))}
                 <input type="submit" value="Submit" />
             </form>

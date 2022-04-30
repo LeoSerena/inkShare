@@ -23,7 +23,7 @@ class Header extends React.Component {
     }
 
     render(){
-        return <h1 onClick={redirectHomepage}>Soil</h1>
+        return <h1 onClick={()=>this.props.homepage()}>Soil</h1>
     }
 }
 

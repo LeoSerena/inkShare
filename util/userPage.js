@@ -82,9 +82,7 @@ class ModifBookForm extends React.Component {
         })
     }
 
-    handleChange(event) {
-        this.setState({[event.target.name] : event.target.value})
-    }
+    handleChange(event) { this.setState({[event.target.name] : event.target.value}) }
 
     handleSubmit(e){
         e.preventDefault()
@@ -176,9 +174,7 @@ class Table extends React.Component {
     // Here we KNOW the "this" that will be called will be the Table and not the Row when executed on the header
     // that is in the Row because we BINDED it with the "this.handleSortClick = this.handleSortClick.bind(this)" line
     // It is thus safe to pass the function below
-    handleSortClick(byValue){ 
-        this.setState({ list : this.state.list.sort((x,y) => x[byValue] > y[byValue] ? 1 : -1) }) 
-    }
+    handleSortClick(byValue){ this.setState({ list : this.state.list.sort((x,y) => x[byValue] > y[byValue] ? 1 : -1) }) }
 
     handleDelClick(ID){
         $.ajax({
@@ -240,18 +236,3 @@ class TablesContainer extends React.Component {
         )
     }
 }
-
-const domContainer = document.querySelector('#root');
-const root = ReactDOM.createRoot(domContainer);
-
-let page = <div>
-    <Header/>
-    <UserComponent/>
-    <TablesContainer/>
-    <button onClick={() => $.ajax({
-        type:'POST',
-        url:'addDiscussion'
-    })}>ADD</button>
-    </div>
-
-root.render(page)

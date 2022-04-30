@@ -3,22 +3,24 @@
 class RecentDiscussions extends React.Component {
     constructor(props){
         super(props)
+
+        this.state = {
+            discussions : []
+        }
+    }
+
+    componentDidMount(){
+        $.ajax({
+            type : 'GET',
+            url : 'getRecentDiscussions',
+            success : (data) => this.setState({discussions : data}),
+            error : (err) => console.log(err)
+        })
     }
 
     render(){
-        return <div></div>
+        return (<ul> RECENT DISCUSSIONS
+            {this.state.discussions.map(d => <li key={d._id}>{d.title}</li>)}
+            </ul>)
     }
 }
-
-const domContainer = document.querySelector('#root');
-const root = ReactDOM.createRoot(domContainer);
-
-let page = <div>
-    <Header/>
-    <RightHeader logged={domContainer.getAttribute('logged')}/>
-    {/* <LeftNavigation/>
-    <Search/>
-    <RecentDiscussions/> */}
-    </div>
-
-root.render(page)
